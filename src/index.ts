@@ -20,9 +20,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"]
   }
 });
-io.on("connection", (socket: Socket) => {
-  console.log(socket.id);
-})
+
 
 // config pug . 
 app.set('views', path.join(__dirname, 'views'));
