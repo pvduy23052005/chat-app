@@ -18,13 +18,14 @@ html(lang="vi")
           h1.register-title Tạo tài khoản mới
 
         //- Error/Success Message
-        //- if error.length > 0 
-        //-   .error-message#errorMessage
-        //-     | #{error}
+        if error.length > 0 
+          .error-message#errorMessage
+            | #{error}
+
 
 
         //- Register Form
-        form#registerForm(method="POST" action="/user/register")
+        form#registerForm(method="POST" action="/auth/register")
 
           //- Username
           .form-group
@@ -96,6 +97,6 @@ html(lang="vi")
         //- Login Link
         .login-link
           | Đã có tài khoản? 
-          a(href="/user/login") Đăng nhập ngay
+          a(href="/auth/login") Đăng nhập ngay
 
-    script(src="/client/js/user.js") 
+    script(src="/js/script.js") 

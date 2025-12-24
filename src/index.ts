@@ -6,7 +6,9 @@ import * as database from "./config/database";
 import indexRoute from "./routes/index.route";
 import { Server, Socket } from "socket.io";
 import http from "http"
-
+import flash from "express-flash";
+import session from "express-session";
+import cookieParser from "cookie-parser"
 
 const port: number | string | undefined = process.env.PORT;
 const app: Express = express();
@@ -22,10 +24,29 @@ const io = new Server(server, {
 });
 
 
-// config pug . 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use(
+  session({
+    secret: "your-secret-key", // Replace with a strong, unique secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }, // Example: session lasts for 1 minute
+  })
+);
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.warning = req.flash("warning");
+
+  next();
+});
 
 // config global . 
 (global as any)._io = io;
