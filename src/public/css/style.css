@@ -186,3 +186,55 @@
   cursor: pointer;
 }
 /* end css chat  */
+
+/* css header */
+header {
+  width: 100%;
+  background-color: var(--color-bg-sidebar);
+  box-shadow: var(--item-box-shadow);
+  margin-bottom: 20px;
+  padding: 10px 0px;
+}
+
+header .inner-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header .inner-search {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+header .inner-search form {
+  width: 100%;
+}
+
+header .inner-searh form input {
+  outline: none;
+  border: none;
+}
+
+header .inner-info {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+header .inner-info .name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+header .inner-info img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/*  endcss header  */

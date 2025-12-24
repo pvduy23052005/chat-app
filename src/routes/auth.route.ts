@@ -10,4 +10,6 @@ router.get("/register", controller.register);
 
 router.post("/register", controller.registerPost);
 
+router.get("/logout" , controller.logout);
+
 export const authRoute: Router = router; 

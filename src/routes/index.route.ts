@@ -5,9 +5,9 @@ import authMiddleware from "../middlewares/auth.middlewares";
 
 const indexRoute = (app: Express) => {
 
-  app.use("/", authMiddleware, chatRoute);
-
   app.use("/auth", authRoute);
+
+  app.use("/", authMiddleware, chatRoute);
 }
 
 export default indexRoute; 

@@ -79,3 +79,12 @@ export const registerPost = async (req: Request, res: Response) => {
   }
 }
 
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token");
+    res.redirect("/auth/login");
+  } catch (error) {
+
+  }
+}
+

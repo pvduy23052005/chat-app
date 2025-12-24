@@ -1,0 +1,17 @@
+header 
+  .container
+    .row 
+      .col-3
+        .inner-menu 
+          a(href="/auth/logout" class = "btn btn-") logout 
+      .col-6
+        .inner-search 
+          form(action="" method="") 
+            .form-group 
+              input(type="text" class = "form-control" placeholder = "Tìm kiếm")
+      .col-3
+        .inner-info 
+          span(class = "name") #{user.fullName}
+          img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp"), alt="")
+
+
