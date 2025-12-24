@@ -7,6 +7,36 @@ export const login = async (req: Request, res: Response) => {
   res.render("pages/auth/login");
 }
 
+// [post] /auth/login . 
+export const loginPost = async (req: Request, res: Response) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const user = await User.findOne({
+      email: email,
+    });
+
+    if (!email || !password) {
+      req.flash("error", "Vui lòng điền đầy đủ thông tin");
+      return res.redirect("/user/login");
+    }
+    if (!user) {
+      req.flash("error", "Email không chính xác");
+      return res.redirect("/user/login");
+    }
+    if (user.password != md5(password)) {
+      req.flash("error", "Password không chính xác");
+      return res.redirect("/user/login");
+    }
+
+    res.cookie("token", user.token);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // [get] /auth/register . 
 export const register = async (req: Request, res: Response) => {
   res.render("pages/auth/register");
@@ -42,7 +72,7 @@ export const registerPost = async (req: Request, res: Response) => {
     newUser.save();
     res.cookie("token", newUser.token);
 
-    req.flash("success" , "Đăng ký thành cồng");
+    req.flash("success", "Đăng ký thành cồng");
     res.redirect("/auth/login");
   } catch (error) {
     console.log(error);
