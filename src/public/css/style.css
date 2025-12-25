@@ -110,6 +110,35 @@
   justify-content: space-between;
   padding: 20px 10px 10px 10px;
   background-color: var(--color-hover-secondary);
+  height: 100%;
+}
+
+.chat-main .chat-box .chat-message-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
+  margin-bottom: 10px;
+  max-height: 430px;
+  height: 100%;
+}
+
+/* Custom scrollbar cho chat */
+.chat-main .chat-box .chat-message-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-main .chat-box .chat-message-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.chat-main .chat-box .chat-message-body::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}
+
+.chat-main .chat-box .chat-message-body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-hover);
 }
 
 .chat-box .inner-incoming {
@@ -158,7 +187,7 @@
   width: 100%;
   border-top: 1px solid #ddd;
   padding: 8px;
-  bottom: 0;
+  flex-shrink: 0; /* Không cho footer bị co lại */
 }
 
 .chat-box .chat-message-footer form {
@@ -184,6 +213,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 50px;
+  height: 50px;
 }
 /* end css chat  */
 
