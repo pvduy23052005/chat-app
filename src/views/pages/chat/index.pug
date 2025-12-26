@@ -33,10 +33,12 @@ block main
                   .content #{chat.content}
 
             .inner-list-typing 
-
           .chat-message-footer 
+            emoji-picker
             form(action="" method="" id = "chat-form" )
               input(type="text" placeholder = "Nhập nội dung")
+              butotn(class = "btn btn-primary btn-icon") 
+                i.fa-regular.fa-face-grin-wide
               button(class = "btn btn-primary btn-send-message" )
                 i.fa-solid.fa-paper-plane 
 

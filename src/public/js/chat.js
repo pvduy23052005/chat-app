@@ -96,3 +96,24 @@ if (listTyping) {
 }
 
 // end typing .
+
+const btnIcon = document.querySelector(".chat-main #chat-form .btn-icon");
+if (btnIcon) {
+  btnIcon.addEventListener("click", () => {
+    const boxIcon = document.querySelector("emoji-picker");
+    boxIcon.classList.toggle("show");
+  });
+}
+// send icon .
+const boxIcon = document.querySelector("emoji-picker");
+
+if (boxIcon) {
+  boxIcon.addEventListener("emoji-click", (e) => {
+    const chatInput = document.querySelector(
+      ".chat-main .chat-box #chat-form input"
+    );
+    const icon = e.detail.unicode;
+    chatInput.value += icon;
+  });
+}
+// end send icon .

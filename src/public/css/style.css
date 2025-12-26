@@ -213,8 +213,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
 }
 /* end css chat  */
 
@@ -292,14 +292,14 @@ header .inner-info img {
 /* KHUNG BONG BÓNG CHAT */
 .box-typing {
   position: relative;
-  display: inline-flex; 
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   background-color: #e4e6eb;
   padding: 10px 15px;
   border-radius: 18px;
   width: fit-content;
-  height: 36px; 
+  height: 36px;
 }
 
 .inner-dots {
@@ -309,10 +309,9 @@ header .inner-info img {
 }
 
 .inner-list-typing .inner-dots span {
-  width: 8px; 
+  width: 8px;
   height: 8px;
   margin: 0 3px;
-  
 
   /* Màu chấm xám đậm hơn nền */
   background-color: #65676b;
@@ -350,3 +349,38 @@ header .inner-info img {
   }
 }
 /* end typing css  */
+
+/* css icon  */
+.btn-icon {
+  display: flex;
+  padding: 10px;
+  border-radius: 50%;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+}
+
+emoji-picker {
+  position: absolute;
+  transform: translateY(-90%);
+  right: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+emoji-picker.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(-100%);
+  pointer-events: all;
+}
+
+/* end css icon  */
