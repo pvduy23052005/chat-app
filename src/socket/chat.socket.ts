@@ -7,6 +7,7 @@ const chatSocket = async (res: Response): Promise<void> => {
   const fullName = res.locals.user.fullName;
 
   _io.once("connection", (socket: Socket) => {
+    console.log(`user connected : ${userLogined}`);
     // server on event .
     socket.on("CLIENT_SEND_MESSAGE", async (data) => {
       const newChat = new Chat({
@@ -23,6 +24,14 @@ const chatSocket = async (res: Response): Promise<void> => {
       })
 
     });
+
+    socket.on("CLIENT_SEND_TYPING", (data) => {
+      socket.broadcast.emit("SERVER_SEND_TYPING", {
+        user_id: userLogined,
+        fullName: fullName,
+        type: data
+      })
+    })
   })
 }
 

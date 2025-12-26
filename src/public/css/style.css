@@ -269,3 +269,84 @@ header .inner-info img {
 }
 
 /*  endcss header  */
+
+/* typing css  */
+
+/* Container bao ngoài: Dùng để căn chỉnh vị trí (ví dụ căn trái) */
+.inner-list-typing {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px; /* Tạo khoảng cách với tin nhắn dưới */
+  margin-left: 10px; /* Cách lề trái một chút */
+}
+
+/* Phần hiển thị tên người đang gõ (nếu có) */
+.inner-name {
+  font-size: 14px;
+  color: #65676b;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+/* KHUNG BONG BÓNG CHAT */
+.box-typing {
+  position: relative;
+  display: inline-flex; 
+  align-items: center;
+  justify-content: center;
+  background-color: #e4e6eb;
+  padding: 10px 15px;
+  border-radius: 18px;
+  width: fit-content;
+  height: 36px; 
+}
+
+.inner-dots {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.inner-list-typing .inner-dots span {
+  width: 8px; 
+  height: 8px;
+  margin: 0 3px;
+  
+
+  /* Màu chấm xám đậm hơn nền */
+  background-color: #65676b;
+  border-radius: 50%;
+
+  /* Animation */
+  opacity: 0.6;
+  animation: blink 1.4s infinite ease-in-out both;
+}
+
+/* Delay để tạo hiệu ứng lượn sóng */
+.inner-list-typing .inner-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.inner-list-typing .inner-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.inner-list-typing .inner-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Hiệu ứng nhấp nháy */
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.7); /* Thu nhỏ */
+    opacity: 0.5; /* Mờ đi */
+  }
+  40% {
+    transform: scale(1); /* Phóng to bình thường */
+    opacity: 1; /* Rõ nét */
+  }
+}
+/* end typing css  */

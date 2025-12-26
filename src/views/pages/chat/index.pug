@@ -32,9 +32,11 @@ block main
                 if chat.content 
                   .content #{chat.content}
 
+            .inner-list-typing 
+
           .chat-message-footer 
-            form(action="" method="" id = "chat-form" placeholder = "Nhập nội dung")
-              input(type="text")
+            form(action="" method="" id = "chat-form" )
+              input(type="text" placeholder = "Nhập nội dung")
               button(class = "btn btn-primary btn-send-message" )
                 i.fa-solid.fa-paper-plane 
 
