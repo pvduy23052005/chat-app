@@ -29,7 +29,7 @@ if (formChat) {
     const files = upload.cachedFileArray;
     const message = e.target[0].value;
     const images = await Promise.all(files.map((file) => fileToBase64(file)));
-    if (message !== "" || images) {
+    if (message !== "" || images.length !== 0) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         message: message,
         images: images,
@@ -42,6 +42,24 @@ if (formChat) {
 // end client send message
 
 // client on send message
+const objectViewer = {
+  title: false, // Tắt tiêu đề file để giao diện sạch sẽ
+  toolbar: {
+    zoomIn: 1,
+    zoomOut: 1,
+    oneToOne: 1,
+    reset: 1,
+    prev: 1,
+    next: 1,
+    rotateLeft: 1,
+    rotateRight: 1,
+    flipHorizontal: 0,
+    flipVertical: 0,
+  },
+  // Quan trọng: Để CSS backdrop-filter hoạt động tốt trên một số trình duyệt
+  className: "custom-viewer-modal",
+};
+
 socket.on("SERVER_SEND_MESSAGE", (data) => {
   const chatBox = document.querySelector(".chat-body .chat-message-body");
   const myId = document.querySelector("[my-id]").getAttribute("my-id");
@@ -61,7 +79,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     htmlFullName = `<div class = "name"> ${data.fullName}</div>`;
   }
 
-  if (data.message !== "") {
+  if (data.content !== "") {
     htmlContent = `<div class = "content"> ${data.content}</div>`;
   }
 
@@ -73,7 +91,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     htmlImages += "</div>";
   }
 
-  if (htmlContent) {
+  if (data.content === "") {
     divMessage.innerHTML = `
     ${htmlFullName}
     ${htmlImages}
@@ -87,9 +105,17 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   }
 
   chatBox.insertBefore(divMessage, listTyping);
+  const gallery = new Viewer(divMessage, objectViewer);
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 // end client on send message
+
+// viewer images
+const bodyViewer = document.querySelector(".chat-main .chat-message-body");
+if (bodyViewer) {
+  const gallery = new Viewer(bodyViewer, objectViewer);
+}
+//end  viewer images
 
 // typing.
 // CLIENT SEND TYPING .

@@ -9,6 +9,25 @@
   height: 600px;
 }
 
+.button-footer {
+  display: flex;
+  padding: 10px;
+  border-radius: 50%;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  background-color: var(--color-button);
+  transition: all 0.3s ease;
+  color: var(--color-bg-sidebar);
+}
+
+.button-footer:hover{
+  background-color: var(--color-hover-primary);
+}
+
 .chat-main .chat-header {
   background-color: var(--color-hover-primary);
   display: flex;
@@ -225,17 +244,6 @@
   height: 50px;
 }
 
-.chat-box .chat-message-footer .btn-send-message {
-  display: flex;
-  padding: 10px;
-  border-radius: 50%;
-  border: none;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
-}
 /* end css chat  */
 
 /* css header */
@@ -371,17 +379,7 @@ header .inner-info img {
 /* end typing css  */
 
 /* css icon  */
-.btn-icon {
-  display: flex;
-  padding: 10px;
-  border-radius: 50%;
-  border: none;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
-}
+
 
 emoji-picker {
   position: absolute;
@@ -449,5 +447,88 @@ emoji-picker.show {
   width: 90px;
   object-fit: contain;
 }
-
 /* end css preview */
+
+/* css viewer */
+.viewer-backdrop {
+  /* Màu nền đen nhưng có độ trong suốt */
+  background-color: rgba(0, 0, 0, 0.85) !important;
+
+  backdrop-filter: blur(5px);
+}
+
+.viewer-toolbar > ul {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px; /* Bo tròn */
+  padding: 5px 15px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.viewer-toolbar > ul > li {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  margin: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-toolbar > ul > li:hover {
+  background-color: var(--color-hover-primary) !important;
+  transform: scale(1.1);
+}
+
+.viewer-toolbar > ul > li::before {
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-button.viewer-close {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s;
+}
+
+.viewer-button::before {
+  bottom: 0;
+  left: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+}
+
+.viewer-button.viewer-close:hover {
+  background-color: var(--color-hover-primary);
+}
+
+.viewer-navbar {
+  border-top: none;
+}
+
+.viewer-list > li {
+  border-radius: 4px;
+  overflow: hidden;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.viewer-list > li.viewer-active {
+  opacity: 1;
+  border: 2px solid var(--color-hover-primary);
+}
+
+.viewer-toolbar {
+  width: 100%;
+}
+/* end css viewer */
