@@ -31,7 +31,7 @@ export const loginPost = async (req: Request, res: Response) => {
     }
 
     res.cookie("token", user.token);
-    res.redirect("/");
+    res.redirect("/chat");
   } catch (error) {
     console.log(error);
   }
