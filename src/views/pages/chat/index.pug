@@ -31,12 +31,22 @@ block main
                   .name #{chat.fullName}
                 if chat.content 
                   .content #{chat.content}
+                if chat.images && chat.images.length > 0 
+                  .images
+                    each image in chat.images 
+                      img(src= image, alt="") 
+
 
             .inner-list-typing 
           .chat-message-footer 
+            .inner-images-preview 
+              div(class="custom-file-container" data-upload-id="upload-images")
+
             emoji-picker
             form(action="" method="" id = "chat-form" )
               input(type="text" placeholder = "Nhập nội dung")
+              label(for = "file-upload-with-preview-upload-images" class="btn btn-primary btn-upload")
+                i.fa-solid.fa-image
               butotn(class = "btn btn-primary btn-icon") 
                 i.fa-regular.fa-face-grin-wide
               button(class = "btn btn-primary btn-send-message" )
