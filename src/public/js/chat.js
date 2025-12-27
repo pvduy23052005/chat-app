@@ -1,14 +1,41 @@
+import { FileUploadWithPreview } from "https://unpkg.com/file-upload-with-preview/dist/index.js";
+
+const upload = new FileUploadWithPreview("upload-images", {
+  multiple: true,
+  maxFileCount: 10,
+  text: {
+    chooseFile: "Chọn ảnh...",
+    browse: "Chọn ảnh",
+    selectedCount: "ảnh đã chọn",
+  },
+});
+
+// Convert file to base64
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 // client send message
 const formChat = document.querySelector("#chat-form");
 if (formChat) {
-  formChat.addEventListener("submit", (e) => {
+  formChat.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const files = upload.cachedFileArray;
     const message = e.target[0].value;
-    if (message !== "") {
+    const images = await Promise.all(files.map((file) => fileToBase64(file)));
+    if (message !== "" || images) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         message: message,
+        images: images,
       });
       e.target[0].value = "";
+      upload.resetPreviewPanel();
     }
   });
 }
@@ -23,8 +50,9 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     ".chat-main .chat-body .inner-list-typing"
   );
 
-  let htmlContent = "";
+  let htmlContent;
   let htmlFullName = "";
+  let htmlImages = "";
 
   if (myId == data.user_id) {
     divMessage.classList.add("inner-outgoing");
@@ -37,10 +65,26 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     htmlContent = `<div class = "content"> ${data.content}</div>`;
   }
 
-  divMessage.innerHTML = `
+  if (data.images.length > 0) {
+    htmlImages += `<div class = "images">`;
+    data.images.forEach((imageUrl) => {
+      htmlImages += `<img src=${imageUrl} alt="">`;
+    });
+    htmlImages += "</div>";
+  }
+
+  if (htmlContent) {
+    divMessage.innerHTML = `
     ${htmlFullName}
-    ${htmlContent}
+    ${htmlImages}
   `;
+  } else {
+    divMessage.innerHTML = `
+    ${htmlFullName}
+    ${htmlContent} 
+    ${htmlImages}
+  `;
+  }
 
   chatBox.insertBefore(divMessage, listTyping);
   chatBox.scrollTop = chatBox.scrollHeight;
