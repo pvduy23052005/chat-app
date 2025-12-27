@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 import { Response } from "express";
 import Chat from "../models/chat.model";
-import { uploadCloud } from "../helpers/uploadCloud";
 
 const chatSocket = async (res: Response): Promise<void> => {
   const userLogined = res.locals.user.id;
@@ -11,13 +10,9 @@ const chatSocket = async (res: Response): Promise<void> => {
     console.log(`user connected : ${userLogined}`);
     // server on event .
     socket.on("CLIENT_SEND_MESSAGE", async (data) => {
-      const images = data.images;
-      const imageUrls = await uploadCloud(images);
-
       const newChat = new Chat({
         user_id: userLogined,
         content: data.message,
-        images: imageUrls,
       });
       await newChat.save();
 
@@ -25,8 +20,7 @@ const chatSocket = async (res: Response): Promise<void> => {
       _io.emit("SERVER_SEND_MESSAGE", {
         user_id: userLogined,
         fullName: fullName,
-        content: data.message,
-        images: imageUrls,
+        content: data.message
       })
 
     });
