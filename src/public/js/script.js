@@ -55,10 +55,3 @@ toggleConfirmPassword.addEventListener("click", function () {
           `;
   }
 });
-
-// priview images.
-const upload = new FileUploadWithPreview.FileUploadWithPreview("my-unique-id");
-upload.cachedFileArray;
-upload.emulateInputSelection(); // to open image browser
-upload.resetPreviewPanel(); // clear all selected images
-//end  priview images .

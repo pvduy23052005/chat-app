@@ -10,9 +10,6 @@ const chatSchema = new mongoose.Schema({
   content: {
     type: String,
   },
-  images: {
-    type: Array,
-  },
   deleted: {
     type: Boolean,
     default: false
