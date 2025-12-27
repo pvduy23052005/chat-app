@@ -1,0 +1,8 @@
+mixin chat-list-user(users)
+  .chat-list-friend 
+    each user in users
+      .box-friend 
+        img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
+        .inner-content 
+          span(class = "name")  #{user.fullName} 
+          span(class = "last-message") xin chao

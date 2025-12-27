@@ -1,4 +1,8 @@
 extends ../../layout/default.pug
+include ../../mixins/chat-message-body.pug
+include ../../mixins/chat-message-footer.pug
+include ../../mixins/chat-list-user.pug
+include ../../mixins/box-info.pug
 
 block main 
   .container 
@@ -9,46 +13,10 @@ block main
             | Friend 
           a(href="http://")
             | Not friend 
-        .box-info 
-          span(class = "name-user") Ho va ten
-          img(src="/images/default-avatar.webp" alt="")
+        +box-info()
       .chat-body 
-        .chat-list-friend 
-          each user in users
-            .box-friend 
-              img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
-              .inner-content 
-                span(class = "name")  #{user.fullName} 
-                span(class = "last-message") xin chao 
-
+        +chat-list-user(users)
         .chat-box
-          .chat-message-body 
-            each chat in chats 
-              div(
-                class = (chat.user_id === user.id ? "inner-outgoing" : "inner-incoming")
-              )
-                if chat.user_id !== user.id 
-                  .name #{chat.fullName}
-                if chat.content 
-                  .content #{chat.content}
-                if chat.images && chat.images.length > 0 
-                  .images
-                    each image in chat.images 
-                      img(src= image, alt="") 
-
-
-            .inner-list-typing 
-          .chat-message-footer 
-            .inner-images-preview 
-              div(class="custom-file-container" data-upload-id="upload-images")
-
-            emoji-picker
-            form(action="" method="" id = "chat-form" )
-              input(type="text" placeholder = "Nhập nội dung")
-              label(for = "file-upload-with-preview-upload-images" class="btn  button-footer")
-                i.fa-solid.fa-image
-              butotn(class = "btn  btn-icon button-footer") 
-                i.fa-regular.fa-face-grin-wide
-              button(class = "btn button-footer" )
-                i.fa-solid.fa-paper-plane 
+          +chat-message-body(chats)
+          +chat-message-footer()
 

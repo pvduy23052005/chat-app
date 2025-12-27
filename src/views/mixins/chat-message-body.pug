@@ -1,0 +1,17 @@
+mixin chat-message-body(chats)
+  .chat-message-body 
+    each chat in chats 
+      div(
+        class = (chat.user_id === user.id ? "inner-outgoing" : "inner-incoming")
+      )
+        if chat.user_id !== user.id 
+          .name #{chat.fullName}
+        if chat.content 
+          .content #{chat.content}
+        if chat.images && chat.images.length > 0 
+          .images
+            each image in chat.images 
+              img(src= image, alt="") 
+
+
+    .inner-list-typing 

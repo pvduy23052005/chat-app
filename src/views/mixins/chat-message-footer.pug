@@ -1,0 +1,14 @@
+mixin chat-message-footer()
+  .chat-message-footer 
+    .inner-images-preview 
+      div(class="custom-file-container" data-upload-id="upload-images")
+
+    emoji-picker
+    form(action="" method="" id = "chat-form" )
+      input(type="text" placeholder = "Nhập nội dung")
+      label(for = "file-upload-with-preview-upload-images" class="btn  button-footer")
+        i.fa-solid.fa-image
+      butotn(class = "btn  btn-icon button-footer") 
+        i.fa-regular.fa-face-grin-wide
+      button(class = "btn button-footer" )
+        i.fa-solid.fa-paper-plane 
