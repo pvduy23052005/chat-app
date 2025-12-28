@@ -1,4 +1,4 @@
-mixin box-info()
+mixin box-info(titleRoom , avatarRoom)
   .box-info 
-    span(class = "name-user") Ho va ten
-    img(src="/images/default-avatar.webp" alt="")
+    span(class = "name-user") #{titleRoom}
+    img(src=(avatarRoom ? avatarRoom : "/images/default-avatar.webp") alt="")

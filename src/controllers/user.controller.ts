@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-
 import User from "../models/user.model";
+import userSocket from "../socket/user.socket";
 
 export const index = async (req: Request, res: Response) => {
   try {
@@ -9,6 +9,8 @@ export const index = async (req: Request, res: Response) => {
       _id: { $ne: userLogined },
       deleted: false
     });
+
+    userSocket(res);
 
     res.render("pages/user/index", {
       title: "Danh sách người dùng",
