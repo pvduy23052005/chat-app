@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   },
   typeRoom: {
     type: String,
-    enum: ["single", "group"],
+    enum: ["single", "group" , "friend"],
   },
   members: [
     {

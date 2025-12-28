@@ -9,14 +9,18 @@ block main
     .chat-main(my-id = user.id)
       .chat-header 
         .nav-header 
-          a(href="http://") 
-            | Friend 
-          a(href="http://")
-            | Not friend 
-        +box-info(titleRoom , avatarRoom)
+          a(href="/chat") 
+            | Tin nhắn 
+          a(href="/chat/not-friend")
+            | Tin nhắn chờ 
+        if infoRoom 
+          +box-info(infoRoom)
+        else
+          .text-center.mt-2
+            h4 Vui lòng chọn người muốn nhắn tin
       .chat-body 
         +chat-list-user(users)
         .chat-box
-          +chat-message-body(chats)
-          +chat-message-footer()
-
+          if infoRoom
+            +chat-message-body(chats)
+            +chat-message-footer()

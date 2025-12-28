@@ -19,6 +19,7 @@ const chatSocket = async (roomId: string, res: Response): Promise<void> => {
         user_id: userLogined,
         content: data.message,
         images: imageUrls,
+        room_id: roomId
       });
       await newChat.save();
 

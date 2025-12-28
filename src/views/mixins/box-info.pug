@@ -1,4 +1,4 @@
-mixin box-info(titleRoom , avatarRoom)
+mixin box-info(infoRoom)
   .box-info 
-    span(class = "name-user") #{titleRoom}
-    img(src=(avatarRoom ? avatarRoom : "/images/default-avatar.webp") alt="")
+    span(class = "name-user") #{infoRoom.titleRoom}
+    img(src=(infoRoom.avatarRoom ? infoRoom.avatarRoom : "/images/default-avatar.webp") alt="")

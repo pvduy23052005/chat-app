@@ -12,7 +12,7 @@ if (listBtnChat) {
 // client on SERVER_SEND_ROOM_ID
 socket.on("SERVER_SEND_ROOM_ID", (data) => {
   const roomId = data.roomId;
-  window.location.href = `/chat/${roomId}`;
+  window.location.href = `/chat?roomId=${roomId}`;
   console.log(roomId);
 });
 // end chat not-friend .

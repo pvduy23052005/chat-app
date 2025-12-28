@@ -8,7 +8,7 @@ const userSocket = async (res: Response): Promise<void> => {
     socket.on("CLIENT_SEND_CHAT", async (userId: string) => {
       // check exist room . 
       const existRoom = await Room.findOne({
-        typeRoom: "friend",
+        typeRoom: "single",
         "members.user_id": {
           $all: [myId, userId]
         }
@@ -18,7 +18,7 @@ const userSocket = async (res: Response): Promise<void> => {
       } else {
         const newRoom = new Room(
           {
-            typeRoom: "friend",
+            typeRoom: "single",
             members: [
               {
                 user_id: myId,
@@ -33,6 +33,7 @@ const userSocket = async (res: Response): Promise<void> => {
             ]
           });
         await newRoom.save();
+        console.log(newRoom);
         socket.emit("SERVER_SEND_ROOM_ID", { roomId: newRoom.id });
       }
     })
