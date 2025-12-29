@@ -2,12 +2,17 @@ import { Response } from "express";
 import User from "../models/user.model";
 import Room from "../models/room.model"
 
-const getRoomUser = async (res: Response) => {
+const getRoomUser = async (res: Response, status: string) => {
   const userLogined: string = res.locals.user.id;
 
   const rooms = await Room.find({
     typeRoom: "single",
-    "members.user_id": userLogined,
+    "members": {
+      $elemMatch: {
+        user_id: userLogined,
+        status: status
+      }
+    },
   });
   const listRoomChat = [];
   for (const room of rooms) {

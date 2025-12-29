@@ -1,0 +1,26 @@
+extends ../../layout/default.pug
+include ../../mixins/chat-message-body.pug
+include ../../mixins/chat-message-footer.pug
+include ../../mixins/chat-list-user.pug
+include ../../mixins/box-info.pug
+
+block main 
+  .container 
+    .chat-main(my-id = user.id)
+      .chat-header 
+        .nav-header 
+          a(href="/chat") 
+            | Tin nhắn 
+          a(href="/chat/not-friend")
+            | Tin nhắn chờ 
+        if infoRoom 
+          +box-info(infoRoom)
+        else
+          .text-center.mt-2
+            h4 Vui lòng chọn người muốn nhắn tin
+      .chat-body 
+        +chat-list-user-not-friend(users)
+        .chat-box
+          if infoRoom
+            +chat-message-body(chats)
+            +chat-message-footer()
