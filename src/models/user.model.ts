@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: random.randomString(20)
   },
+  friendRequests: {
+    type: Array
+  },
+  friendAccepts: {
+    type: Array
+  },
   friendList: [
     {
       user_id: String,

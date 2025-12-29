@@ -16,3 +16,19 @@ socket.on("SERVER_SEND_ROOM_ID", (data) => {
   console.log(roomId);
 });
 // end chat not-friend .
+
+// friend request ..
+const btnAddFriend = document.querySelectorAll(".btn-add");
+if (btnAddFriend) {
+  btnAddFriend.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const userId = button.getAttribute("user-id");
+      button.closest(".box-user").classList.add("add-friend-request");
+      socket.emit("CIENT_FRIEND_REQUEST", {
+        userId: userId,
+      });
+    });
+  });
+}
+// end add-friend .

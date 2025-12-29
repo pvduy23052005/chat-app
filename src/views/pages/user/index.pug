@@ -1,8 +1,5 @@
 extends ../../layout/default.pug
 
-
-
-
 block main 
   .container.py-3 
     .row-users 
@@ -21,6 +18,9 @@ block main
               button(class="btn-action btn-add" user-id=user.id) 
                 i.fa-solid.fa-user-plus
                 |  Kết bạn
+              button(class = "btn-action btn-cancel") 
+                i(class='bx bx-message-circle-x')
+                | Hủy
               button(class="btn-action btn-chat" user-id=user.id) 
                 i.fa-solid.fa-comment
                 |  Nhắn tin

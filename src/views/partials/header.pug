@@ -1,17 +1,20 @@
 header 
   .container
     .row 
-      .col-6
+      .col-7
         .inner-menu 
           a(href="/auth/logout" class = "btn  btn-menu") Đăng xuất 
           a(href="/user" class = "btn  btn-menu") Người dùng 
           a(href="/chat" class = "btn  btn-menu") Tin nhắn
+          a(href="/user/friend-request" class = "btn  btn-menu") Lời mời
+          a(href="/chat/friend-accept" class = "btn  btn-menu") Lời gửi 
+
       .col-3
         .inner-search 
           form(action="" method="") 
             .form-group 
               input(type="text" class = "form-control" placeholder = "Tìm kiếm")
-      .col-3
+      .col-2
         .inner-info 
           span(class = "name") #{user.fullName}
           img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp"), alt="")

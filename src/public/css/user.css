@@ -104,3 +104,21 @@
 .btn-chat:hover {
   background-color: var(--color-hover-secondary);
 }
+
+.btn-cancel i {
+  font-size: 20px;
+}
+
+.box-user .btn-cancel {
+  display: none;
+}
+
+.box-user.add-friend-request .btn-add{
+  display: none;
+}
+
+.box-user.add-friend-request .btn-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

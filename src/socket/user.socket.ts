@@ -37,8 +37,34 @@ const userSocket = async (res: Response): Promise<void> => {
         socket.emit("SERVER_SEND_ROOM_ID", { roomId: newRoom.id });
 
       }
+    });
 
-    })
+    // friend request . 
+    socket.on("CIENT_FRIEND_REQUEST", async (data) => {
+      // add userB to firnedRequest of userA 
+      try {
+        await User.updateOne({
+          _id: myId,
+        }, {
+          $addToSet: {
+            friendRequests: data.userId
+          }
+        });
+        //  add userA to friendAccepts of userB . 
+        await User.updateOne({
+          _id: data.userId,
+        }, {
+          $addToSet: {
+            friendAccepts: myId,
+          }
+        })
+        console.log("ok");
+      } catch (error) {
+        console.log(error);
+      }
+      
+    });
+    // end friend request 
   })
 }
 
