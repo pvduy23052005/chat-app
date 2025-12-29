@@ -187,3 +187,10 @@ if (boxIcon) {
   });
 }
 // end send icon .
+
+// scrollBody
+const chatBox = document.querySelector(".chat-body .chat-message-body");
+if (chatBox) {
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+// end scrollBody

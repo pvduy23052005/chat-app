@@ -3,19 +3,17 @@ import Chat from "../models/chat.model";
 import User from "../models/user.model";
 import chatSocket from "../socket/chat.socket";
 import getInfoRoom from "../helpers/getInfoRoom.helper";
+import Room from "../models/room.model";
+import getRoomUser from "../helpers/getRoomUser.helper";
 
 // [get] /chat?roomId; 
 export const index = async (req: Request, res: Response) => {
   try {
-    const userLogined: string = res.locals.user.id;
     const roomId = (req.query.roomId as string) || "";
     let chats: any[] = [];
     let infoRoom: any = null;
 
-    const users = await User.find({
-      _id: { $ne: userLogined },
-      deleted: false
-    }).select("-password");
+    const users = await getRoomUser(res);
 
     if (roomId) {
       chats = await Chat.find({
@@ -34,6 +32,7 @@ export const index = async (req: Request, res: Response) => {
       }
       chatSocket(roomId, res);
     }
+
     res.render("pages/chat/index", {
       title: "Chat-app",
       users: users,

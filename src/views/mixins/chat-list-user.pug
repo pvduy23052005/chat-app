@@ -1,7 +1,7 @@
 mixin chat-list-user(users)
   .chat-list-friend 
     each user in users
-      .box-friend 
+      a(href=`/chat?roomId=${user.room_chat_id}` class = "box-friend")  
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
         .inner-content 
           span(class = "name")  #{user.fullName} 

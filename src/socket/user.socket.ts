@@ -1,6 +1,7 @@
 import Room from "../models/room.model";
 import { Response } from "express";
 import { Socket } from "socket.io";
+import User from "../models/user.model";
 
 const userSocket = async (res: Response): Promise<void> => {
   const myId: string = res.locals.user.id;
@@ -33,9 +34,10 @@ const userSocket = async (res: Response): Promise<void> => {
             ]
           });
         await newRoom.save();
-        console.log(newRoom);
         socket.emit("SERVER_SEND_ROOM_ID", { roomId: newRoom.id });
+
       }
+
     })
   })
 }
