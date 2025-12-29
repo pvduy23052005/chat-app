@@ -24,7 +24,7 @@
   color: var(--color-bg-sidebar);
 }
 
-.button-footer:hover{
+.button-footer:hover {
   background-color: var(--color-hover-primary);
 }
 
@@ -42,22 +42,36 @@
   align-items: center;
   width: 200px;
   padding: 20px;
+  gap: 8px;
+  justify-content: space-between;
 }
 
 .chat-main .nav-header a {
   display: flex;
   align-items: center;
   color: var(--color-bg-sidebar);
-  font-size: 18px;
-  margin-right: 10px;
-  border-bottom: 2px solid #000;
+  font-size: 14px;
 }
 
+.chat-main .nav-header a.active,
+.chat-main .nav-header a:hover {
+  color: var(--color-bg-sidebar);
+  border-bottom: 2px solid var(--color-bg-sidebar);
+}
 .chat-main .chat-header .box-info {
   display: flex;
   align-items: center;
   margin-left: auto;
   padding-right: 20px;
+}
+
+.chat-main .chat-header h6 {
+  color: var(--color-bg-sidebar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  margin: 0;
 }
 
 .chat-main .chat-header .box-info .name-user {
@@ -259,6 +273,15 @@ header .inner-menu {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+}
+
+header .inner-menu .btn-menu {
+  border-bottom: 2px solid var(--color-button);
+}
+
+header .inner-menu .btn-menu:hover {
+  border: 2px solid var(--color-primary-hover);
 }
 
 header .inner-search {
@@ -279,14 +302,14 @@ header .inner-searh form input {
 
 header .inner-info {
   display: flex;
-  gap: 5px;
+  gap: 8px;
   align-items: center;
   justify-content: center;
 }
 
 header .inner-info .name {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 header .inner-info img {
@@ -379,7 +402,6 @@ header .inner-info img {
 /* end typing css  */
 
 /* css icon  */
-
 
 emoji-picker {
   position: absolute;
