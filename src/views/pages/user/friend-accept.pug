@@ -14,11 +14,14 @@ block main
           .inner-info 
             .inner-name #{user.fullName}
             .inner-actions 
-              button(class="btn-action  btn-accept-friend" user-id=user.id) 
+              button(class="btn-action  btn-accept-friend"  user-id=user.id) 
                 i.fa-solid.fa-user-plus
                 |  Chấp nhận
+              button(class="btn-action btn-accepted-friend" disabled ) 
+                i.fa-solid.fa-user-plus
+                |  Đã chấp nhận
               button(class = "btn-action  btn-refuse-friend" user-id = user.id) 
-                  | Hủy
+                | Hủy
               button( class = "btn-action btn-deleted-friend " user-id = user.id 
                 disabled
                 ) Đã xóa

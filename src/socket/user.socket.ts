@@ -116,7 +116,58 @@ const userSocket = async (res: Response): Promise<void> => {
     });
     // end refuse friend 
 
-  })
+    // accept friend . 
+    socket.on("CLIENT_ACCEPT_FRIEND", async (data) => {
+      try {
+        let existRoom = await Room.findOne({
+          typeRoom: "single",
+          "members.user_id": {
+            $all: [myId, data.userId],
+          }
+        });
+        if (existRoom) {
+          await Room.updateOne(
+            { _id: existRoom.id },
+            { $set: { "members.$[].status": "accepted" } }
+          );
+        } else {
+          const newRoom = new Room({
+            typeRoom: "single",
+            members: [
+              { user_id: myId, status: "accepted" },
+              { user_id: data.userId, status: "accepted" }
+            ]
+          });
+          existRoom = await newRoom.save();
+        }
+        await User.updateOne({
+          _id: myId,
+        }, {
+          $addToSet: {
+            frienList: {
+              user_id: data.userId,
+              room_chat_id: existRoom.id
+            }
+          },
+          $pull: { friendAccepts: data.userId }
+        });
+        await User.updateOne({
+          _id: data.userId,
+        }, {
+          $addToSet: {
+            frienList: {
+              user_id: myId,
+              room_chat_id: existRoom.id
+            }
+          },
+          $pull: { friendRequests: myId }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    // end accept friend . 
+  });
 }
 
 export default userSocket; 

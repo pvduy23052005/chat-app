@@ -139,3 +139,15 @@
 .box-user.refuse .btn-deleted-friend {
   display: block;
 }
+
+.box-user .btn-accepted-friend {
+  display: none;
+}
+
+.box-user.accepted .btn-accepted-friend {
+  display: block;
+}
+
+.box-user.accepted .btn-accept-friend{
+  display: none;
+}
