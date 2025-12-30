@@ -47,3 +47,19 @@ if (btnCancelFriend) {
   });
 }
 // end cancel add friend .
+
+// refuse friend
+const btnRefuseFriend = document.querySelectorAll(".btn-refuse-friend");
+if (btnRefuseFriend) {
+  btnRefuseFriend.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const userId = button.getAttribute("user-id");
+      button.closest(".box-user").classList.add("refuse");
+      socket.emit("CLIENT_REFUSE_FRIEND", {
+        userId: userId,
+      });
+    });
+  });
+}
+// end refuse friend

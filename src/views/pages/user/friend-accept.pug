@@ -1,0 +1,24 @@
+extends ../../layout/default.pug
+
+block main 
+  .container.py-3 
+    .row-users 
+      each user in users
+        .box-user 
+          .inner-avatar 
+            img(
+              src=(user.avatar ? user.avatar : "/images/default-avatar.webp") 
+              alt=user.fullName
+            )
+
+          .inner-info 
+            .inner-name #{user.fullName}
+            .inner-actions 
+              button(class="btn-action  btn-accept-friend" user-id=user.id) 
+                i.fa-solid.fa-user-plus
+                |  Chấp nhận
+              button(class = "btn-action  btn-refuse-friend" user-id = user.id) 
+                  | Hủy
+              button( class = "btn-action btn-deleted-friend " user-id = user.id 
+                disabled
+                ) Đã xóa

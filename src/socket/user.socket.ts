@@ -5,7 +5,7 @@ import User from "../models/user.model";
 
 const userSocket = async (res: Response): Promise<void> => {
   const myId: string = res.locals.user.id;
-  _io.once("connection", (socket:Socket) => {
+  _io.once("connection", (socket: Socket) => {
     socket.on("CLIENT_SEND_CHAT", async (userId: string) => {
       // check exist room . 
       const existRoom = await Room.findOne({
@@ -68,7 +68,7 @@ const userSocket = async (res: Response): Promise<void> => {
     // friend cancel 
     socket.on("CLIENT_FRIEND_CANCEL", async (data) => {
       try {
-        // add userB to firnedRequest of userA 
+        // delete userB to firnedRequest of userA 
         await User.updateOne({
           _id: myId,
         }, {
@@ -76,7 +76,7 @@ const userSocket = async (res: Response): Promise<void> => {
             friendRequests: data.userId
           }
         });
-        //  add userA to friendAccepts of userB . 
+        //  delete userA to friendAccepts of userB . 
         await User.updateOne({
           _id: data.userId,
         }, {
@@ -89,6 +89,32 @@ const userSocket = async (res: Response): Promise<void> => {
       }
     });
     // end friend cancel 
+
+    // refuse friend 
+    socket.on("CLIENT_REFUSE_FRIEND", async (data) => {
+      try {
+        // delete userB to firnedRequest of userA 
+        await User.updateOne({
+          _id: myId,
+        }, {
+          $pull: {
+            friendAccepts: data.userId
+          }
+        });
+        //  delete userA to friendAccepts of userB . 
+        await User.updateOne({
+          _id: data.userId,
+        }, {
+          $pull: {
+            requestFriends: myId,
+          }
+        });
+        console.log("ok")
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    // end refuse friend 
 
   })
 }

@@ -23,10 +23,13 @@ const userSchema = new mongoose.Schema({
     default: random.randomString(20)
   },
   friendRequests: {
-    type: Array
+    type: Array,
+    default: []
   },
   friendAccepts: {
-    type: Array
+    type: Array,
+    default: []
+
   },
   friendList: [
     {

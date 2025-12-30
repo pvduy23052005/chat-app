@@ -113,7 +113,7 @@
   display: none;
 }
 
-.box-user.add-friend-request .btn-add{
+.box-user.add-friend-request .btn-add {
   display: none;
 }
 
@@ -121,4 +121,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.box-user .btn-accept-friend {
+  background-color: var(--color-button);
+  color: #ffffff;
+}
+
+.box-user .btn-deleted-friend {
+  display: none;
+}
+
+.box-user.refuse .btn-refuse-friend {
+  display: none;
+}
+
+.box-user.refuse .btn-deleted-friend {
+  display: block;
 }

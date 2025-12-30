@@ -4,4 +4,6 @@ import * as controller from "../controllers/user.controller";
 
 router.get("/", controller.index);
 
+router.get("/friend-accepts", controller.friendAccepts);
+
 export const userRoute: Router = router; 
