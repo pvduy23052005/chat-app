@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import md5 from "md5";
+import { Socket } from "socket.io";
 
 // [get] /auth/login . 
 export const login = async (req: Request, res: Response) => {
@@ -31,6 +32,19 @@ export const loginPost = async (req: Request, res: Response) => {
     }
 
     res.cookie("token", user.token);
+
+    await User.updateOne({
+      token: user.token
+    }, {
+      statusOnline: "online"
+    });
+
+    _io.once("connection", (socket: Socket) => {
+      socket.broadcast.emit("SERVER_USER_ONLINE", {
+        userId: user.id,
+        status: "online",
+      });
+    });
     res.redirect("/chat");
   } catch (error) {
     console.log(error);
@@ -66,6 +80,7 @@ export const registerPost = async (req: Request, res: Response) => {
       fullName: fullName,
       email: email,
       password: password,
+      statusOffline: "offline"
     };
 
     const newUser = new User(userObject);
@@ -79,12 +94,30 @@ export const registerPost = async (req: Request, res: Response) => {
   }
 }
 
-export const logout = (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   try {
+    await User.updateOne({
+      token: req.cookies.token,
+    }, {
+      statusOnline: "offline"
+    });
+
+    const user: any = await User.findOne({
+      token: req.cookies.token,
+      deleted: false
+    }).select("fullName");
+
+    if (user) {
+      _io.emit("SERVER_USER_ONLINE", {
+        userId: user.id,
+        status: "offline",
+      });
+    }
+    
     res.clearCookie("token");
     res.redirect("/auth/login");
   } catch (error) {
-
+    console.log(error);
   }
 }
 

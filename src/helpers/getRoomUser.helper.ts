@@ -29,7 +29,7 @@ const getRoomUser = async (res: Response, status: string) => {
   const listIdUser = listRoomChat.map((item) => item.user_id);
   const users: any = await User.find({
     _id: { $in: listIdUser }
-  }).select("fullName avatar").lean();
+  }).select("fullName avatar statusOnline").lean();
 
   for (let user of users) {
     const room = listRoomChat.find(

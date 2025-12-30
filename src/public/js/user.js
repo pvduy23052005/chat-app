@@ -78,5 +78,17 @@ if (btnAcceptFriend) {
     });
   });
 }
-
 // end btn acceptd
+
+// statusOnline
+socket.on("SERVER_USER_ONLINE", (data) => {
+  const listUser = document.querySelector(".chat-main .chat-list-friend");
+  console.log(listUser);
+  const user = listUser.querySelector(`[user-id="${data.userId}"]`);
+  console.log(user);
+  if (user) {
+    const statusOnline = user.querySelector(".inner-status");
+    statusOnline.setAttribute("status", data.status);
+  }
+});
+// end statusOnline
