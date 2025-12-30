@@ -5,7 +5,7 @@ import User from "../models/user.model";
 
 const userSocket = async (res: Response): Promise<void> => {
   const myId: string = res.locals.user.id;
-  _io.once("connection", (socket: Socket) => {
+  _io.once("connection", (socket:Socket) => {
     socket.on("CLIENT_SEND_CHAT", async (userId: string) => {
       // check exist room . 
       const existRoom = await Room.findOne({
@@ -41,8 +41,8 @@ const userSocket = async (res: Response): Promise<void> => {
 
     // friend request . 
     socket.on("CIENT_FRIEND_REQUEST", async (data) => {
-      // add userB to firnedRequest of userA 
       try {
+        // add userB to firnedRequest of userA 
         await User.updateOne({
           _id: myId,
         }, {
@@ -58,13 +58,38 @@ const userSocket = async (res: Response): Promise<void> => {
             friendAccepts: myId,
           }
         })
-        console.log("ok");
       } catch (error) {
         console.log(error);
       }
-      
+
     });
     // end friend request 
+
+    // friend cancel 
+    socket.on("CLIENT_FRIEND_CANCEL", async (data) => {
+      try {
+        // add userB to firnedRequest of userA 
+        await User.updateOne({
+          _id: myId,
+        }, {
+          $pull: {
+            friendRequests: data.userId
+          }
+        });
+        //  add userA to friendAccepts of userB . 
+        await User.updateOne({
+          _id: data.userId,
+        }, {
+          $pull: {
+            friendAccepts: myId,
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    // end friend cancel 
+
   })
 }
 

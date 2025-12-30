@@ -32,3 +32,18 @@ if (btnAddFriend) {
   });
 }
 // end add-friend .
+
+// cancel add friend .
+const btnCancelFriend = document.querySelectorAll(".btn-cancel");
+if (btnCancelFriend) {
+  btnCancelFriend.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const userId = button.getAttribute("user-id");
+      button.closest(".box-user").classList.remove("add-friend-request");
+      socket.emit("CLIENT_FRIEND_CANCEL", {
+        userId: userId,
+      });
+    });
+  });
+}
+// end cancel add friend .
