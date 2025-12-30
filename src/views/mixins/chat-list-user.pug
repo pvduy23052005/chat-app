@@ -1,8 +1,10 @@
 mixin chat-list-user(users)
   .chat-list-friend 
     each user in users
+      - const isActive = (roomId === user.room_chat_id) ? "active" : ""
+
       a(href=`/chat?roomId=${user.room_chat_id}` 
-        class = "box-friend" 
+        class = `box-friend ${isActive}`
         user-id = user._id
       )  
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")

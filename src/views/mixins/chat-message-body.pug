@@ -5,13 +5,17 @@ mixin chat-message-body(chats)
         class = (chat.user_id === user.id ? "inner-outgoing" : "inner-incoming")
       )
         if chat.user_id !== user.id 
-          .name #{chat.fullName}
-        if chat.content 
-          .content #{chat.content}
-        if chat.images && chat.images.length > 0 
-          .images
-            each image in chat.images 
-              img(src= image, alt="") 
+          .avatar
+            img(src=(chat.avatar ? chat.avatar : "/images/default-avatar.webp" ), alt="")
+        .inner-message
+          if chat.user_id !== user.id 
+            .name #{chat.fullName}
+          if chat.content 
+            .content #{chat.content}
+          if chat.images && chat.images.length > 0 
+            .images
+              each image in chat.images 
+                img(src= image, alt="") 
 
 
     .inner-list-typing 

@@ -71,12 +71,20 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   let htmlContent;
   let htmlFullName = "";
   let htmlImages = "";
+  let htmlAvatar = "";
 
   if (myId == data.user_id) {
     divMessage.classList.add("inner-outgoing");
   } else {
     divMessage.classList.add("inner-incoming");
     htmlFullName = `<div class = "name"> ${data.fullName}</div>`;
+    htmlAvatar = `
+    <div class = "avatar">
+      <img src=${
+        data.avatar ? data.avatar : "/images/default-avatar.webp"
+      } alt="">
+    </div>
+    `;
   }
 
   if (data.content !== "") {
@@ -93,15 +101,21 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
   if (data.content === "") {
     divMessage.innerHTML = `
-    ${htmlFullName}
-    ${htmlImages}
-  `;
+        ${htmlAvatar}
+      <div class = "inner-message">
+        ${htmlFullName}
+        ${htmlImages} 
+      </div>
+    `;
   } else {
     divMessage.innerHTML = `
-    ${htmlFullName}
-    ${htmlContent} 
-    ${htmlImages}
-  `;
+        ${htmlAvatar}
+      <div class = "inner-message">
+        ${htmlFullName}
+        ${htmlContent} 
+        ${htmlImages}
+      </div>
+    `;
   }
 
   chatBox.insertBefore(divMessage, listTyping);
@@ -111,9 +125,13 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 // end client on send message
 
 // viewer images
-const bodyViewer = document.querySelector(".chat-main .chat-message-body");
+const bodyViewer = document.querySelectorAll(
+  ".chat-main .chat-message-body .inner-message "
+);
 if (bodyViewer) {
-  const gallery = new Viewer(bodyViewer, objectViewer);
+  bodyViewer.forEach((viewer) => {
+    const gallery = new Viewer(viewer, objectViewer);
+  });
 }
 //end  viewer images
 

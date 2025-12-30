@@ -18,12 +18,13 @@ export const index = async (req: Request, res: Response) => {
       chats = await Chat.find({
         deleted: false,
         room_id: roomId
-      });
+      }).sort({ createdAt: 1 });
       for (let chat of chats) {
         const user = await User.findOne({
           _id: chat.user_id,
-        }).select("fullName");
-        chat.fullName = user?.fullName;
+        }).select("fullName avatar").lean();
+        chat.fullName = user?.fullName || "";
+        chat.avatart = user?.avatar || "";
       }
       const objectRoom = await getInfoRoom(req, res);
       if (objectRoom) {
@@ -37,6 +38,7 @@ export const index = async (req: Request, res: Response) => {
       users: users,
       chats: chats,
       infoRoom: infoRoom,
+      roomId: roomId,
     });
   } catch (error) {
     console.log(error);
@@ -80,3 +82,9 @@ export const chatNotFriend = async (req: Request, res: Response) => {
     console.log(error);
   }
 }
+
+
+
+
+
+

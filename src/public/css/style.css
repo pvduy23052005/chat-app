@@ -101,15 +101,18 @@
   width: 200px;
   border-right: 1px solid #000;
   height: 100%;
-  padding-top: 20px;
-  padding-left: 20px;
+  gap: 10px;
 }
 
 .chat-main .chat-body .chat-list-friend .box-friend {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
   position: relative;
+  padding: 10px;
+}
+
+.chat-main .box-friend.active {
+  background-color: #eef0fa;
 }
 
 .chat-main .box-friend .inner-status {
@@ -117,7 +120,7 @@
   top: 3px;
   left: 3px;
   font-size: 12px;
-  background-color: var(--color-bg-sidebar);  
+  background-color: var(--color-bg-sidebar);
   opacity: 0;
   display: flex;
   align-items: center;
@@ -200,11 +203,19 @@
   display: flex;
   align-items: flex-start;
   margin-bottom: 15px;
-  flex-direction: column;
+  /* flex-direction: column; */
+}
+
+.chat-box .inner-incoming .avatar img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 .chat-box .inner-incoming .name {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 5px;
   color: var(--color-button);
   font-weight: 700;
@@ -227,6 +238,13 @@
   flex-direction: column;
 }
 
+.chat-box .inner-outgoing .inner-message {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
 .chat-box .inner-outgoing .content {
   display: inline-block;
   border-radius: 12px;
@@ -240,7 +258,6 @@
 
 .chat-box .images {
   display: flex;
-  text-align: right;
   gap: 8px;
   background-color: var(--color-bg-sidebar);
   padding: 10px;
@@ -253,7 +270,6 @@
   width: 80px;
   object-fit: contain;
   cursor: pointer;
-  margin-left: auto;
   border-radius: 10px;
 }
 

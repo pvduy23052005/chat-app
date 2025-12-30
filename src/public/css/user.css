@@ -1,8 +1,21 @@
-.row-users {
+.container-user {
+  box-shadow: var(--item-box-shadow);
+  border-radius: 12px;
+  padding: 50px;
+}
+
+.container-user h3{
+  color : var(--color-hover-primary);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--color-hover-primary);
+}
+
+.container-user .row-users {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
   padding-bottom: 50px;
+  width: 100%;
 }
 
 .box-user {
@@ -148,6 +161,6 @@
   display: block;
 }
 
-.box-user.accepted .btn-accept-friend{
+.box-user.accepted .btn-accept-friend {
   display: none;
 }

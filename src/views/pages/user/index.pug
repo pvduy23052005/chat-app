@@ -2,25 +2,27 @@ extends ../../layout/default.pug
 
 block main 
   .container.py-3 
-    .row-users 
-      each user in users
-        .box-user 
-          .inner-avatar 
-            img(
-              src=(user.avatar ? user.avatar : "/images/default-avatar.webp") 
-              alt=user.fullName
-            )
-            //- div(class=`inner-status ${user.statusOnline}`)
+    .container-user
+      .header 
+        h3 Danh sách người dùng
+      .row-users 
+        each user in users
+          .box-user 
+            .inner-avatar 
+              img(
+                src=(user.avatar ? user.avatar : "/images/default-avatar.webp") 
+                alt=user.fullName
+              )
 
-          .inner-info 
-            .inner-name #{user.fullName}
-            .inner-actions 
-              button(class="btn-action btn-add" user-id=user.id) 
-                i.fa-solid.fa-user-plus
-                |  Kết bạn
-              button(class = "btn-action btn-cancel" user-id = user.id) 
-                i(class='bx bx-message-circle-x')
-                | Hủy
-              button(class="btn-action btn-chat" user-id=user.id) 
-                i.fa-solid.fa-comment
-                |  Nhắn tin
+            .inner-info 
+              .inner-name #{user.fullName}
+              .inner-actions 
+                button(class="btn-action btn-add" user-id=user.id) 
+                  i.fa-solid.fa-user-plus
+                  |  Kết bạn
+                button(class = "btn-action btn-cancel" user-id = user.id) 
+                  i(class='bx bx-message-circle-x')
+                  | Hủy
+                button(class="btn-action btn-chat" user-id=user.id) 
+                  i.fa-solid.fa-comment
+                  |  Nhắn tin
