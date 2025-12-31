@@ -29,10 +29,13 @@ if (formChat) {
     const files = upload.cachedFileArray;
     const message = e.target[0].value;
     const images = await Promise.all(files.map((file) => fileToBase64(file)));
-    if (message !== "" || images.length !== 0) {
+    const params = new URLSearchParams(window.location.search);
+    const roomId = params.get("roomId");
+    if (message !== "" || images.length !== 0 || roomId) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         message: message,
         images: images,
+        roomId: roomId,
       });
       e.target[0].value = "";
       upload.resetPreviewPanel();
@@ -142,7 +145,12 @@ const input = document.querySelector(
 );
 if (input) {
   input.addEventListener("keyup", () => {
-    socket.emit("CLIENT_SEND_TYPING", "show");
+    const params = new URLSearchParams(window.location.search);
+    const roomId = params.get("roomId");
+    socket.emit("CLIENT_SEND_TYPING", {
+      type: "show",
+      roomId: roomId,
+    });
   });
 }
 
@@ -155,6 +163,13 @@ if (listTyping) {
   socket.on("SERVER_SEND_TYPING", (data) => {
     const existsUser = listTyping.querySelector(`[user-id='${data.user_id}']`);
     const chatBox = document.querySelector(".chat-body .chat-message-body");
+    const currentRoomId = new URL(window.location.href).searchParams.get(
+      "roomId"
+    );
+
+    if (data.room_id !== currentRoomId) {
+      return;
+    }
 
     if (!existsUser) {
       const boxTyping = document.createElement("div");

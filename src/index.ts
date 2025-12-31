@@ -1,11 +1,11 @@
-import express, { Request, Response, Express } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import path from "path";
 import * as database from "./config/database";
 import indexRoute from "./routes/index.route";
-import { Server, Socket } from "socket.io";
 import http from "http"
+import socketConfig from "./socket/index";
 import flash from "express-flash";
 import session from "express-session";
 import cookieParser from "cookie-parser"
@@ -15,14 +15,6 @@ const app: Express = express();
 
 // congif socket.io
 const server = http.createServer(app);
-const io = new Server(server, {
-  // Cấu hình CORS để tránh lỗi nếu client/server khác domain (dev mode)
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -48,12 +40,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// config global . 
-(global as any)._io = io;
-
 database.connectDatabase();
 
 indexRoute(app);
+
+socketConfig(server);
+
 
 server.listen(port, () => {
   console.log(`Server listening: ${port}`);

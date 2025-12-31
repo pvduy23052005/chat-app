@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Chat from "../models/chat.model";
 import User from "../models/user.model";
-import chatSocket from "../socket/chat.socket";
 import getInfoRoom from "../helpers/getInfoRoom.helper";
 import getRoomUser from "../helpers/getRoomUser.helper";
 
@@ -13,7 +12,7 @@ export const index = async (req: Request, res: Response) => {
     let infoRoom: any = null;
 
     const users = await getRoomUser(res, "accepted");
-    
+
     if (roomId) {
       chats = await Chat.find({
         deleted: false,
@@ -30,7 +29,6 @@ export const index = async (req: Request, res: Response) => {
       if (objectRoom) {
         infoRoom = objectRoom;
       }
-      chatSocket(roomId, res);
     }
 
     res.render("pages/chat/index", {
@@ -69,7 +67,6 @@ export const chatNotFriend = async (req: Request, res: Response) => {
       if (objectRoom) {
         infoRoom = objectRoom;
       }
-      chatSocket(roomId, res);
     }
 
     res.render("pages/chat/not-friend", {
