@@ -67,12 +67,28 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   const currentRoomId = new URLSearchParams(window.location.search).get(
     "roomId"
   );
+  const myId = document.querySelector("[my-id]").getAttribute("my-id");
+
+  const bodyChatList = document.querySelector(".chat-list-friend");
+  if (bodyChatList) {
+    let boxUser = null;
+    if (myId == data.user_id) {
+      boxUser = bodyChatList.querySelector(".box-friend.active");
+    } else {
+      boxUser = bodyChatList.querySelector(`[user-id="${data.user_id}"]`);
+    }
+    if (boxUser) {
+      const boxLastMessage = boxUser.querySelector(".last-message");
+      const messageToShow = data.content ? data.content : "Đã gửi một ảnh";
+      boxLastMessage.innerHTML = messageToShow;
+      bodyChatList.prepend(boxUser);
+    }
+  }
   if (currentRoomId != data.room_id) {
     return;
   }
 
   const chatBox = document.querySelector(".chat-body .chat-message-body");
-  const myId = document.querySelector("[my-id]").getAttribute("my-id");
   const divMessage = document.createElement("div");
   const listTyping = document.querySelector(
     ".chat-main .chat-body .inner-list-typing"
@@ -131,9 +147,6 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   chatBox.insertBefore(divMessage, listTyping);
   const gallery = new Viewer(divMessage, objectViewer);
   chatBox.scrollTop = chatBox.scrollHeight;
-
-
-  
 });
 // end client on send message
 
