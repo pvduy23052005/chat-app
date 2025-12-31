@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   },
   typeRoom: {
     type: String,
-    enum: ["single", "group" , "friend"],
+    enum: ["single", "group", "friend"],
   },
   members: [
     {
@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
       }
     }
   ],
+  lastMessage: {
+    type: String,
+    default: ""
+  },
   deleted: {
     type: Boolean,
     default: false

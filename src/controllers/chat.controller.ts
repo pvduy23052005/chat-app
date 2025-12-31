@@ -13,7 +13,7 @@ export const index = async (req: Request, res: Response) => {
     let infoRoom: any = null;
 
     const users = await getRoomUser(res, "accepted");
-
+    
     if (roomId) {
       chats = await Chat.find({
         deleted: false,

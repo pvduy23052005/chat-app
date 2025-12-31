@@ -10,17 +10,23 @@ mixin chat-list-user(users)
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
         .inner-content 
           span(class = "name")  #{user.fullName} 
-          span(class = "last-message") xin chao
+          span(class = "last-message") 
+            | #{user.lastMessage ? (user.lastMessage.length > 15 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
         .inner-status(status=user.statusOnline)
           i.fa-solid.fa-circle
 
 mixin chat-list-user-not-friend(users)
   .chat-list-friend 
     each user in users
-      a(href=`/chat/not-friend?roomId=${user.room_chat_id}` class = "box-friend")  
+      a(href=`/chat/not-friend?roomId=${user.room_chat_id}` 
+        class = "box-friend"
+        user-id = user._id
+        )  
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
         .inner-content 
           span(class = "name")  #{user.fullName} 
-          span(class = "last-message") xin chao
+          span(class = "last-message") 
+            |   #{user.lastMessage ? (user.lastMessage.length > 15 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
+
         //- .inner-status(status=user.statusOnline)
         //-   i.fa-solid.fa-circle

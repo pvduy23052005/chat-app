@@ -23,6 +23,7 @@ const getRoomUser = async (res: Response, status: string) => {
       listRoomChat.push({
         user_id: ortherMember.user_id,
         room_id: room.id,
+        lastMessage: room.lastMessage
       })
     }
   }
@@ -37,6 +38,7 @@ const getRoomUser = async (res: Response, status: string) => {
     );
     if (room) {
       user.room_chat_id = room.room_id;
+      user.lastMessage = room.lastMessage
     }
   }
   return users;
