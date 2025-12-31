@@ -5,7 +5,7 @@ import userSocket from "./handlers/user.socket";
 import chatSocket from "./handlers/chat.socket";
 import User from "../models/user.model";
 
-const socketConfig = (server: http.Server) => {
+const socketConfig = (server: http.Server): Server => {
   const io = new Server(server, {
     cors: {
       origin: "*",

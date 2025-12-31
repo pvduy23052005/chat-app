@@ -11,7 +11,10 @@ const userSchema = new mongoose.Schema({
   },
   members: [
     {
-      user_id: String,
+      user_id: {
+        type: String, // mongoose.Schema.Types.ObjectId
+        ref: "User"
+      },
       role: {
         type: String,
         enum: ["superAdmin", "admin", "member"],

@@ -1,11 +1,19 @@
 import { Response } from "express";
-import User from "../models/user.model";
-import Room from "../models/room.model"
+import Room from "../models/room.model";
 
-const getRoomUser = async (res: Response, status: string) => {
+export interface UserChatSidebar {
+  _id: string;
+  fullName: string;
+  avatar: string;
+  room_chat_id: string;
+  statusOnline: "online" | "offline";
+  lastMessage: string;
+}
+
+const getRoomUser = async (res: Response, status: string = "accepted"): Promise<UserChatSidebar[]> => {
   const userLogined: string = res.locals.user.id;
 
-  const rooms = await Room.find({
+  const rooms: any = await Room.find({
     typeRoom: "single",
     "members": {
       $elemMatch: {
@@ -13,35 +21,34 @@ const getRoomUser = async (res: Response, status: string) => {
         status: status
       }
     },
-  });
-  const listRoomChat = [];
-  for (const room of rooms) {
-    const ortherMember = room.members.find(
-      (member: any) => member.user_id != userLogined
-    );
-    if (ortherMember) {
-      listRoomChat.push({
-        user_id: ortherMember.user_id,
-        room_id: room.id,
-        lastMessage: room.lastMessage
-      })
-    }
-  }
-  const listIdUser = listRoomChat.map((item) => item.user_id);
-  const users: any = await User.find({
-    _id: { $in: listIdUser }
-  }).select("fullName avatar statusOnline").lean();
+  })
+    .sort({ updatedAt: -1 })
+    .populate({
+      path: "members.user_id",
+      select: "fullName avatar statusOnline"
+    });
 
-  for (let user of users) {
-    const room = listRoomChat.find(
-      (item: any) => item.user_id.toString() === user._id.toString()
+  const users = rooms.map((room: any): UserChatSidebar | null => {
+    const otherMember = room.members.find(
+      (member: any) => member.user_id._id.toString() !== userLogined
     );
-    if (room) {
-      user.room_chat_id = room.room_id;
-      user.lastMessage = room.lastMessage
+
+    if (otherMember && otherMember.user_id) {
+      const user: any = otherMember.user_id;
+
+      return {
+        _id: user._id.toString(),
+        fullName: user.fullName,
+        avatar: user.avatar,
+        room_chat_id: room.id.toString(),
+        statusOnline: user.statusOnline || "offline",
+        lastMessage: room.lastMessage || ""
+      };
     }
-  }
+    return null;
+  }).filter((user: UserChatSidebar) => user != null);
+
   return users;
 }
 
-export default getRoomUser; 
+export default getRoomUser;

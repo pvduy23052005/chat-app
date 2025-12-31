@@ -4,13 +4,13 @@ import User from "../models/user.model";
 import getInfoRoom from "../helpers/getInfoRoom.helper";
 import getRoomUser from "../helpers/getRoomUser.helper";
 
+
 // [get] /chat?roomId; 
 export const index = async (req: Request, res: Response) => {
   try {
     const roomId = (req.query.roomId as string) || "";
     let chats: any[] = [];
     let infoRoom: any = null;
-
     const users = await getRoomUser(res, "accepted");
 
     if (roomId) {
@@ -48,7 +48,6 @@ export const chatNotFriend = async (req: Request, res: Response) => {
     const roomId = (req.query.roomId as string) || "";
     let chats: any[] = [];
     let infoRoom: any = null;
-
     const users = await getRoomUser(res, "waiting");
 
     if (roomId) {
