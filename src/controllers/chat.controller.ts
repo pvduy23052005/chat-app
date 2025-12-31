@@ -15,16 +15,15 @@ export const index = async (req: Request, res: Response) => {
 
     if (roomId) {
       chats = await Chat.find({
-        deleted: false,
-        room_id: roomId
-      }).sort({ createdAt: 1 });
-      for (let chat of chats) {
-        const user = await User.findOne({
-          _id: chat.user_id,
-        }).select("fullName avatar").lean();
-        chat.fullName = user?.fullName || "";
-        chat.avatart = user?.avatar || "";
-      }
+        room_id: roomId,
+        deleted: false
+      })
+        .sort({ createdAt: 1 })
+        .populate({
+          path: "user_id",
+          select: "fullName avatar"
+        });
+
       const objectRoom = await getInfoRoom(req, res);
       if (objectRoom) {
         infoRoom = objectRoom;

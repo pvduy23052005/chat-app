@@ -24,7 +24,7 @@ const chatSocket = async (io: Server, socket: Socket) => {
   socket.on("CLIENT_SEND_MESSAGE", async (data) => {
     const images = data.images;
     const imageUrls = await uploadCloud(images);
-    const roomId = data.romId;
+    const roomId = data.roomId;
 
     const newChat = new Chat({
       user_id: userLogined,
@@ -32,7 +32,7 @@ const chatSocket = async (io: Server, socket: Socket) => {
       images: imageUrls,
       room_id: roomId
     });
-    // await newChat.save();
+    await newChat.save();
 
     await Room.updateOne({
       _id: roomId
@@ -46,6 +46,7 @@ const chatSocket = async (io: Server, socket: Socket) => {
       fullName: fullName,
       content: data.message,
       images: imageUrls,
+      room_id: roomId
     })
   });
 

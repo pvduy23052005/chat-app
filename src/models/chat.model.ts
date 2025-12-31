@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema({
   user_id: {
-    type: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   },
   room_id: {
     type: String

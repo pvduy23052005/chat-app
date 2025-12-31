@@ -64,6 +64,13 @@ const objectViewer = {
 };
 
 socket.on("SERVER_SEND_MESSAGE", (data) => {
+  const currentRoomId = new URLSearchParams(window.location.search).get(
+    "roomId"
+  );
+  if (currentRoomId != data.room_id) {
+    return;
+  }
+
   const chatBox = document.querySelector(".chat-body .chat-message-body");
   const myId = document.querySelector("[my-id]").getAttribute("my-id");
   const divMessage = document.createElement("div");
@@ -124,6 +131,9 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   chatBox.insertBefore(divMessage, listTyping);
   const gallery = new Viewer(divMessage, objectViewer);
   chatBox.scrollTop = chatBox.scrollHeight;
+
+
+  
 });
 // end client on send message
 

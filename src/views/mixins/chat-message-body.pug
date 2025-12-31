@@ -1,15 +1,16 @@
 mixin chat-message-body(chats)
   .chat-message-body 
     each chat in chats 
+      -const user_id = chat.user_id._id.toString()
       div(
-        class = (chat.user_id === user.id ? "inner-outgoing" : "inner-incoming")
+        class = (user_id === user.id ? "inner-outgoing" : "inner-incoming")
       )
-        if chat.user_id !== user.id 
+        if user_id !== user.id 
           .avatar
-            img(src=(chat.avatar ? chat.avatar : "/images/default-avatar.webp" ), alt="")
+            img(src=(chat.user_id.avatar ? chat.user_id.avatar : "/images/default-avatar.webp" ), alt="")
         .inner-message
-          if chat.user_id !== user.id 
-            .name #{chat.fullName}
+          if user_id !== user.id 
+            .name #{chat.user_id.fullName}
           if chat.content 
             .content #{chat.content}
           if chat.images && chat.images.length > 0 

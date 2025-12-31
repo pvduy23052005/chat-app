@@ -180,6 +180,7 @@
   padding: 20px 10px 10px 10px;
   background-color: var(--color-hover-secondary);
   height: 100%;
+  width: 100%;
 }
 
 .chat-main .chat-box .chat-message-body {
@@ -189,6 +190,7 @@
   margin-bottom: 10px;
   max-height: 470px;
   height: 100%;
+  width: 100%;
 }
 
 /* Custom scrollbar cho chat */
