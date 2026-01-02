@@ -34,7 +34,6 @@ const userSocket = async (io: Server, socket: Socket) => {
         });
       await newRoom.save();
       socket.emit("SERVER_SEND_ROOM_ID", { roomId: newRoom.id });
-
     }
   });
 

@@ -11,7 +11,6 @@ block main
         form(
           action="/room/create"
           method="POST"
-          enctype="multipart/form-data"
         )
           //- 1. Nhập tên phòng
           .mb-3
@@ -25,16 +24,15 @@ block main
               required
             )
 
-          //- 2. Ảnh đại diện phòng (Tùy chọn)
-          .mb-3
-            label(for="avatar" class="form-label") Ảnh đại diện
-            input(
-              type="file" 
-              class="form-control" 
-              id="avatar" 
-              name="avatar" 
-              accept="image/*"
-            )
+          //- .mb-3
+          //-   label(for="avatar" class="form-label") Ảnh đại diện
+          //-   input(
+          //-     type="file" 
+          //-     class="form-control" 
+          //-     id="avatar" 
+          //-     name="avatar" 
+          //-     accept="image/*"
+          //-   )
 
           //- 3. Chọn thành viên
           .mb-3
@@ -46,7 +44,7 @@ block main
                     div(class="box-user-select")
                       input(
                         type="checkbox" 
-                        name="members" 
+                        name="memberIds" 
                         value=friend._id 
                         id=`friend-${friend._id}`
                       )
