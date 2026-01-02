@@ -3,6 +3,7 @@ import { chatRoute } from "./chat.route";
 import { authRoute } from "./auth.route";
 import authMiddleware from "../middlewares/auth.middlewares";
 import { userRoute } from "./user.route";
+import { roomRoute } from "./room.route";
 
 const indexRoute = (app: Express) => {
 
@@ -11,6 +12,8 @@ const indexRoute = (app: Express) => {
   app.use("/chat", authMiddleware, chatRoute);
 
   app.use("/user", authMiddleware, userRoute);
+
+  app.use("/room", authMiddleware, roomRoute);
 }
 
 export default indexRoute; 

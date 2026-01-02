@@ -1,0 +1,65 @@
+extends ../../layout/default.pug
+
+block main 
+  .container.my-3
+    .row
+      .col-12
+        h1(class="mb-4") Tạo phòng chat mới
+
+    .row
+      .col-12
+        form(
+          action="/room/create"
+          method="POST"
+          enctype="multipart/form-data"
+        )
+          //- 1. Nhập tên phòng
+          .mb-3
+            label(for="title" class="form-label") Tiêu đề phòng
+            input(
+              type="text" 
+              class="form-control" 
+              id="title" 
+              name="title" 
+              placeholder="Nhập tên phòng..."
+              required
+            )
+
+          //- 2. Ảnh đại diện phòng (Tùy chọn)
+          .mb-3
+            label(for="avatar" class="form-label") Ảnh đại diện
+            input(
+              type="file" 
+              class="form-control" 
+              id="avatar" 
+              name="avatar" 
+              accept="image/*"
+            )
+
+          //- 3. Chọn thành viên
+          .mb-3
+            label(class="form-label") Thêm thành viên
+            if friends && friends.length > 0
+              .row
+                each friend in friends
+                  .col-6.col-md-4.col-lg-3.mb-3
+                    div(class="box-user-select")
+                      input(
+                        type="checkbox" 
+                        name="members" 
+                        value=friend._id 
+                        id=`friend-${friend._id}`
+                      )
+                      label(for=`friend-${friend._id}`)
+                        .inner-avatar
+                          img(
+                            src=(friend.avatar ? friend.avatar : "/images/default-avatar.webp")
+                            alt=friend.fullName
+                          )
+                        .inner-name #{friend.fullName}
+            else 
+              div(class="alert alert-warning") Bạn chưa có bạn bè nào để thêm vào nhóm.
+
+          //- Nút Submit
+          div(class="text-right")
+            button(type="submit" class="btn btn-primary") Tạo phòng

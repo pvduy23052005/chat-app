@@ -1,19 +1,22 @@
 header 
   .container
     .row 
-      .col-7
+      .col-6.col-md-5
         .inner-menu 
           a(href="/auth/logout" class = "btn  btn-menu") Đăng xuất 
           a(href="/user" class = "btn  btn-menu") Người dùng 
           a(href="/chat" class = "btn  btn-menu") Tin nhắn
           a(href="/user/friend-accepts" class = "btn  btn-menu") Lời mời
 
-      .col-3
+      .col-3.col-md-4
         .inner-search 
           form(action="" method="") 
             .form-group 
               input(type="text" class = "form-control" placeholder = "Tìm kiếm")
-      .col-2
+      .col-1.col-md-2
+        .inner-new-room 
+          a(href="/room/create" class = "btn btn-create-room") Tạo phòng  
+      .col-2.col-md-1
         .inner-info 
           span(class = "name") #{user.fullName}
           img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp"), alt="")
