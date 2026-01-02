@@ -4,11 +4,20 @@ import User from "../models/user.model";
 // [get] /user
 export const index = async (req: Request, res: Response) => {
   try {
-    const userLogined: String = res.locals.user.id;
-    const users = await User.find({
-      _id: { $ne: userLogined },
-      deleted: false
-    });
+    const user = res.locals.user;
+    const userLogined: String = user.id;
+    const friendIds: string[] = user.friendList.map((item: any) => item.user_id);
+    const acceptIds: string[] = user.friendAccepts.map((item: any) => item.user_id);
+    const listId = [
+      userLogined,
+      ...friendIds,
+      ...acceptIds
+    ]
+
+    const users: any = await User.find({
+      _id: { $nin: listId },
+      deleted: false,
+    }).select("fullName avatar");
 
     res.render("pages/user/index", {
       title: "Danh sách người dùng",
@@ -16,7 +25,7 @@ export const index = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-
+    console.log(error);
   }
 }
 

@@ -71,7 +71,7 @@ if (btnAcceptFriend) {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       const userId = button.getAttribute("user-id");
-      button.closest(".box-user").classList.add(".accepted");
+      button.closest(".box-user").classList.add("accepted");
       socket.emit("CLIENT_ACCEPT_FRIEND", {
         userId: userId,
       });

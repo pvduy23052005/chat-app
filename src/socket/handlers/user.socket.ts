@@ -143,7 +143,7 @@ const userSocket = async (io: Server, socket: Socket) => {
         _id: myId,
       }, {
         $addToSet: {
-          frienList: {
+          friendList: {
             user_id: data.userId,
             room_chat_id: existRoom.id
           }
@@ -154,13 +154,14 @@ const userSocket = async (io: Server, socket: Socket) => {
         _id: data.userId,
       }, {
         $addToSet: {
-          frienList: {
+          friendList: {
             user_id: myId,
             room_chat_id: existRoom.id
           }
         },
         $pull: { friendRequests: myId }
       });
+      console.log("ok");
     } catch (error) {
       console.log(error);
     }
