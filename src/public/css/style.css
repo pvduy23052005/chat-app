@@ -257,6 +257,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  flex-direction: column;
 }
 
 .chat-box .inner-outgoing .content {
@@ -676,8 +677,8 @@ emoji-picker.show {
 
 /* --- QUAN TRỌNG: Hiệu ứng khi ĐƯỢC CHỌN (Checked) --- */
 .box-user-select input[type="checkbox"]:checked + label {
-  border-color: #007bff; /* Viền xanh */
-  background-color: #e7f1ff; /* Nền xanh nhạt */
+  border-color: #007bff;      /* Viền xanh */
+  background-color: #e7f1ff;  /* Nền xanh nhạt */
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
