@@ -13,7 +13,10 @@ if (listBtnChat) {
 socket.on("SERVER_SEND_ROOM_ID", (data) => {
   const roomId = data.roomId;
   window.location.href = `/chat?roomId=${roomId}`;
-  console.log(roomId);
+});
+socket.on("SERVER_SEND_ROOM_ID_WAITING", (data) => {
+  const roomId = data.roomId;
+  window.location.href = `/chat/not-friend?roomId=${roomId}`;
 });
 // end chat not-friend .
 
@@ -83,9 +86,7 @@ if (btnAcceptFriend) {
 // statusOnline
 socket.on("SERVER_USER_ONLINE", (data) => {
   const listUser = document.querySelector(".chat-main .chat-list-friend");
-  console.log(listUser);
   const user = listUser.querySelector(`[user-id="${data.userId}"]`);
-  console.log(user);
   if (user) {
     const statusOnline = user.querySelector(".inner-status");
     statusOnline.setAttribute("status", data.status);

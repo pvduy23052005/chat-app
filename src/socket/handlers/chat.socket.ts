@@ -15,6 +15,7 @@ const chatSocket = async (io: Server, socket: Socket) => {
 
     for (const room of rooms) {
       socket.join(room.id);
+      console.log("chay qua day ")
     }
   } catch (error) {
     console.error(error);

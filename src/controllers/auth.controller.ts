@@ -24,11 +24,12 @@ export const loginPost = async (req: Request, res: Response) => {
     }
     if (!user) {
       req.flash("error", "Email không chính xác");
-      return res.redirect("/user/login");
+      console.log("chat vao day ")
+      return res.redirect("/auth/login");
     }
     if (user.password != md5(password)) {
-      req.flash("error", "Password không chính xác");
-      return res.redirect("/user/login");
+      req.flash("error", "Mật khẩu không chính xác");
+      return res.redirect("/auth/login");
     }
 
     res.cookie("token", user.token);
@@ -87,7 +88,7 @@ export const registerPost = async (req: Request, res: Response) => {
     newUser.save();
     res.cookie("token", newUser.token);
 
-    req.flash("success", "Đăng ký thành cồng");
+    req.flash("success", "Vui lòng đăng nhập");
     res.redirect("/auth/login");
   } catch (error) {
     console.log(error);
@@ -113,7 +114,7 @@ export const logout = async (req: Request, res: Response) => {
         status: "offline",
       });
     }
-    
+
     res.clearCookie("token");
     res.redirect("/auth/login");
   } catch (error) {

@@ -92,6 +92,7 @@ export const chatNotFriend = async (req: Request, res: Response) => {
       users: users,
       chats: chats,
       infoRoom: infoRoom,
+      roomId  : roomId
     });
   } catch (error) {
     console.log(error);

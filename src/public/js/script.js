@@ -62,9 +62,8 @@ if (toggleConfirmPassword) {
 
 // active nav-header
 const menuLinks = document.querySelectorAll(".chat-main .nav-header a");
-
 if (menuLinks.length > 0) {
-  const currentPath = window.location.pathname; 
+  const currentPath = window.location.pathname;
   menuLinks.forEach((link) => {
     if (link.href) {
       const url = new URL(link.href);

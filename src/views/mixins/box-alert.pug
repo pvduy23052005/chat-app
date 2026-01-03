@@ -1,0 +1,9 @@
+mixin box-error(error)
+  if error.length > 0 
+    .error-message#errorMessage
+      | #{error}
+
+mixin box-success(success)
+  if success.length > 0 
+    .success-message#successMessage 
+      | #{success}

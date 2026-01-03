@@ -17,7 +17,6 @@ html(lang="vi")
           h1.login-title Chào mừng trở lại
           p.login-subtitle Đăng nhập
 
-        //- Error Message
         if error.length > 0 
           .error-message#errorMessage
             | #{error}
@@ -25,8 +24,6 @@ html(lang="vi")
         if success.length > 0 
           .success-message#successMessage 
             | #{success}
-
-
 
         //- Login Form
         form#loginForm(action="/auth/login" method="POST")

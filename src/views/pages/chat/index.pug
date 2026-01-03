@@ -3,9 +3,13 @@ include ../../mixins/chat-message-body.pug
 include ../../mixins/chat-message-footer.pug
 include ../../mixins/chat-list-user.pug
 include ../../mixins/box-info.pug
+include ../../mixins/box-alert.pug
+
 
 block main 
   .container 
+    +box-error(error)
+    +box-success(success)
     .chat-main(my-id = user.id)
       .chat-header 
         .nav-header 

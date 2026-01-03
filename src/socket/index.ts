@@ -20,6 +20,10 @@ const socketConfig = (server: http.Server): Server => {
   io.use(authSokcet);
 
   io.on("connection", (socket: Socket) => {
+    socket.broadcast.emit("SERVER_USER_ONLINE", {
+      userId: socket.data.user.id,
+      status: "online",
+    });
     chatSocket(io, socket);
     userSocket(io, socket);
 

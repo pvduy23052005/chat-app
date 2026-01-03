@@ -23,7 +23,13 @@ export const createPost = async (req: Request, res: Response) => {
   const userLogined = res.locals.user.id;
   const { title, memberIds } = req.body;
 
+  if (!title) {
+    req.flash("error", "Nhập tên phòng");
+    return res.redirect("/room/create");
+  }
+
   if (!memberIds) {
+    req.flash("error", "Vui lòng chọn thành viên");
     return res.redirect("/room/create");
   }
 
@@ -47,7 +53,6 @@ export const createPost = async (req: Request, res: Response) => {
         ]
       }
     });
-    console.log(existRoom);
     if (existRoom) {
       return res.redirect(`/chat?roomId=${existRoom.id}`);
     }
@@ -55,7 +60,7 @@ export const createPost = async (req: Request, res: Response) => {
 
   const newRoomData: any = {
     title: title,
-    typeRoom : "group",
+    typeRoom: "group",
     members: [
       {
         user_id: userLogined,
@@ -75,6 +80,7 @@ export const createPost = async (req: Request, res: Response) => {
 
   const newRoom = new Room(newRoomData);
   await newRoom.save();
+  req.flash("success", "Tạo thành công");
   res.redirect(`/chat?roomId=${newRoom.id}`);
   res.send("ok");
 }

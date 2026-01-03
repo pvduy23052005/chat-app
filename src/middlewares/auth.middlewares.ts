@@ -10,14 +10,14 @@ const authMiddleware = async (
     const token: string | undefined = req.cookies?.token;
 
     if (!token) {
-      req.flash("error", "Vui lòng đăng nhập lại");
+      req.flash("error", "Vui lòng thử lại");
       return res.redirect("/auth/login");
     }
 
     const user = await User.findOne({ token }).select("-password");
 
     if (!user) {
-      req.flash("error", "Vui lòng đăng nhập lại");
+      req.flash("error", "Vui lòng thử lại");
       return res.redirect("/auth/login");
     }
 

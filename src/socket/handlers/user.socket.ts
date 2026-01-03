@@ -14,7 +14,7 @@ const userSocket = async (io: Server, socket: Socket) => {
       }
     });
     if (existRoom) {
-      socket.emit("SERVER_SEND_ROOM_ID", { roomId: existRoom.id });
+      socket.emit("SERVER_SEND_ROOM_ID_WAITING", { roomId: existRoom.id });
     } else {
       const newRoom = new Room(
         {
