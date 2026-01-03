@@ -6,10 +6,11 @@ mixin chat-list-user(users)
       a(href=`/chat?roomId=${user.room_chat_id}` 
         class = `box-friend ${isActive}`
         user-id = user._id
+        room-id=user.room_chat_id
       )  
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
         .inner-content 
-          span(class = "name")  #{user.fullName} 
+          span(class = "name") #{(user.fullName ?user.fullName : user.title )} 
           span(class = "last-message") 
             | #{user.lastMessage ? (user.lastMessage.length > 15 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
         .inner-status(status=user.statusOnline)

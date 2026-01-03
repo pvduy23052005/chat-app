@@ -55,6 +55,7 @@ export const createPost = async (req: Request, res: Response) => {
 
   const newRoomData: any = {
     title: title,
+    typeRoom : "group",
     members: [
       {
         user_id: userLogined,

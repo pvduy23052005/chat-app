@@ -4,10 +4,13 @@ import Room from "../models/room.model";
 export interface UserChatSidebar {
   _id: string;
   fullName: string;
+  title: string;
   avatar: string;
   room_chat_id: string;
   statusOnline: "online" | "offline";
   lastMessage: string;
+  updatedAt: Date;
+  typeRoom: string;
 }
 
 const getRoomUser = async (res: Response, status: string = "accepted"): Promise<UserChatSidebar[]> => {
@@ -25,7 +28,7 @@ const getRoomUser = async (res: Response, status: string = "accepted"): Promise<
     .sort({ updatedAt: -1 })
     .populate({
       path: "members.user_id",
-      select: "fullName avatar statusOnline"
+      select: "fullName avatar statusOnline "
     });
 
   const users = rooms.map((room: any): UserChatSidebar | null => {
@@ -40,9 +43,12 @@ const getRoomUser = async (res: Response, status: string = "accepted"): Promise<
         _id: user._id.toString(),
         fullName: user.fullName,
         avatar: user.avatar,
+        title: user.avatar,
         room_chat_id: room.id.toString(),
         statusOnline: user.statusOnline || "offline",
-        lastMessage: room.lastMessage || ""
+        lastMessage: room.lastMessage || "",
+        updatedAt: room.updatedAt,
+        typeRoom: "single"
       };
     }
     return null;

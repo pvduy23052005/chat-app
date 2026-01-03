@@ -75,12 +75,17 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     if (myId == data.user_id) {
       boxUser = bodyChatList.querySelector(".box-friend.active");
     } else {
-      boxUser = bodyChatList.querySelector(`[user-id="${data.user_id}"]`);
+      boxUser = bodyChatList.querySelector(`[room-id="${data.room_id}"]`);
     }
     if (boxUser) {
+      const prefix = data.user_id === myId ? "Bạn: " : `${data.fullName}: `;
       const boxLastMessage = boxUser.querySelector(".last-message");
       const messageToShow = data.content ? data.content : "Đã gửi một ảnh";
-      boxLastMessage.innerHTML = messageToShow;
+      let fullText = `${prefix}${messageToShow}`;
+      if (fullText.length > 30) {
+        fullText = fullText.slice(0, 25) + "...";
+      }
+      boxLastMessage.innerHTML = fullText;
       bodyChatList.prepend(boxUser);
     }
   }
