@@ -1,7 +1,8 @@
 mixin chat-message-body(chats)
   .chat-message-body 
     each chat in chats 
-      -const user_id = chat.user_id._id.toString()
+      - const user_id = chat.user_id._id.toString()
+      - const time = chat.createdAt ? new Date(chat.createdAt).toLocaleTimeString("vi-VN", {hour: "2-digit", minute: "2-digit"}) : ""
       div(
         class = (user_id === user.id ? "inner-outgoing" : "inner-incoming")
       )
@@ -17,6 +18,6 @@ mixin chat-message-body(chats)
             .images
               each image in chat.images 
                 img(src= image, alt="") 
-
-
+          .inner-time #{time}
+    
     .inner-list-typing 
