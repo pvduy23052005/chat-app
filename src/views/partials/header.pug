@@ -10,9 +10,13 @@ header
 
       .col-3.col-md-4.col-sm-5
         .inner-search 
-          form(action="" method="") 
+          form(action=""  id = "form-search" method="") 
             .form-group 
-              input(type="text" class = "form-control" placeholder = "Tìm kiếm")
+              input(
+                type="text" 
+                class = "form-control" 
+                placeholder = "Tìm kiếm")
+
       .col-1.col-md-2.col-sm-1
         .inner-new-room 
           a(href="/room/create" class = "btn btn-create-room") Tạo phòng  

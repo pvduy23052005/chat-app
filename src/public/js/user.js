@@ -93,3 +93,21 @@ socket.on("SERVER_USER_ONLINE", (data) => {
   }
 });
 // end statusOnline
+
+// serach user
+const search = document.querySelector("#form-search");
+if (search) {
+  let url = new URL(window.location.href);
+  search.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const searchValue = e.target[0].value;
+    if (searchValue) {
+      url.searchParams.set("keyword", searchValue);
+    } else {
+      url.searchParams.delete("keyword");
+    }
+    e.target[0].value = e.target[0].value.trim();
+    window.location.href = url.href;
+  });
+}
+// end serach user

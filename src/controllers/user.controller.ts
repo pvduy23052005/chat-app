@@ -12,11 +12,14 @@ export const index = async (req: Request, res: Response) => {
       userLogined,
       ...friendIds,
       ...acceptIds
-    ]
+    ];
+    const keySearch = (req.query.keyword as string) || "";
+    const regex = new RegExp(keySearch, "i");
 
     const users: any = await User.find({
       _id: { $nin: listId },
       deleted: false,
+      fullName: regex
     }).select("fullName avatar");
 
     res.render("pages/user/index", {
