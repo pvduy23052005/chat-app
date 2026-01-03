@@ -446,82 +446,95 @@ header .btn-icon {
 
 /* typing css  */
 
-/* Container bao ngoài: Dùng để căn chỉnh vị trí (ví dụ căn trái) */
+/* Typing Indicator Container */
 .inner-list-typing {
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease;
+  padding-left: 20px;
+}
+
+.inner-list-typing .inner-incoming {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 10px; /* Tạo khoảng cách với tin nhắn dưới */
-  margin-left: 10px; /* Cách lề trái một chút */
+  align-items: flex-start;
+  gap: 8px;
 }
 
-/* Phần hiển thị tên người đang gõ (nếu có) */
-.inner-name {
-  font-size: 14px;
-  color: #65676b;
-  margin-left: 10px;
-  margin-bottom: 2px;
+.inner-list-typing .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-/* KHUNG BONG BÓNG CHAT */
+.inner-list-typing .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .box-typing {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #e4e6eb;
-  padding: 10px 15px;
-  border-radius: 18px;
-  width: fit-content;
-  height: 36px;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  /* border: 1px solid #667eea; */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 70px;
 }
 
 .inner-dots {
   display: flex;
   align-items: center;
-  height: 100%;
+  gap: 6px;
 }
 
-.inner-list-typing .inner-dots span {
-  width: 8px;
-  height: 8px;
-  margin: 0 3px;
-
-  /* Màu chấm xám đậm hơn nền */
-  background-color: #65676b;
+.inner-dots span {
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 50%;
-
-  /* Animation */
-  opacity: 0.6;
-  animation: blink 1.4s infinite ease-in-out both;
+  animation: pulse 1.4s ease-in-out infinite;
 }
 
-/* Delay để tạo hiệu ứng lượn sóng */
-.inner-list-typing .inner-dots span:nth-child(1) {
+.inner-dots span:nth-child(1) {
   animation-delay: 0s;
 }
 
-.inner-list-typing .inner-dots span:nth-child(2) {
+.inner-dots span:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.inner-list-typing .inner-dots span:nth-child(3) {
+.inner-dots span:nth-child(3) {
   animation-delay: 0.4s;
 }
 
-/* Hiệu ứng nhấp nháy */
-@keyframes blink {
+@keyframes pulse {
   0%,
-  80%,
   100% {
-    transform: scale(0.7); /* Thu nhỏ */
-    opacity: 0.5; /* Mờ đi */
+    transform: scale(0.6);
+    opacity: 0.4;
   }
-  40% {
-    transform: scale(1); /* Phóng to bình thường */
-    opacity: 1; /* Rõ nét */
+  50% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* end typing css  */
 
 /* css icon  */

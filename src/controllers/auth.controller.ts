@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import md5 from "md5";
 import { Socket } from "socket.io";
+import * as random from "../helpers/random";
 
 // [get] /auth/login . 
 export const login = async (req: Request, res: Response) => {
@@ -81,7 +82,8 @@ export const registerPost = async (req: Request, res: Response) => {
       fullName: fullName,
       email: email,
       password: password,
-      statusOffline: "offline"
+      statusOffline: "offline",
+      token: random.randomString(20)
     };
 
     const newUser = new User(userObject);
