@@ -267,3 +267,39 @@ export const deletePost = async (req: Request, res: Response) => {
     res.redirect("/chat");
   }
 };
+
+// [post] /room/edit/:id
+export const editPost = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.id;
+    const { title } = req.body;
+    const myId = res.locals.user.id;
+
+    if (!title) {
+      req.flash("error", "Tiêu đề không được để trống");
+      return res.redirect("back");
+    }
+
+    const room = await Room.findOne({ _id: roomId, deleted: false });
+    if (!room) return res.redirect("/chat");
+
+    const myInfo = room.members.find((member: any) => member.user_id.toString() == myId);
+    if (!myInfo || myInfo.role !== "superAdmin") {
+      req.flash("error", "Bạn không có quyền chỉnh sửa");
+      return res.redirect("back");
+    }
+
+    // 3. Update DB
+    await Room.updateOne(
+      { _id: roomId },
+      {
+        title: title,
+      }
+    );
+
+    req.flash("success", "Cập nhật thông tin thành công");
+    res.redirect(`/room/detail/${roomId}`)
+  } catch (error) {
+    console.log(error);
+  }
+};
