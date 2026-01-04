@@ -1,0 +1,103 @@
+extends ../../layout/default.pug
+include ../../mixins/box-alert.pug
+
+block main 
+  .container.my-4
+    .row.justify-content-center
+      .col-12.col-lg-8
+
+        if success
+          +box-success(success)
+        if error
+          +box-error(error)
+
+        - let isSuperAdmin = false
+        each member in room.members
+          - const memberId = member.user_id._id.toString()
+          if memberId === user.id && member.role === "superAdmin"
+            - isSuperAdmin = true
+
+        .card.mb-4
+          .card-body
+            .d-flex.align-items-center.gap-3
+              .room-avatar
+                img(src=(room.avatar ? room.avatar : "/images/default-avatar.webp" ) alt=room.title)
+
+              //- Room Info
+              .flex-grow-1
+                h3.mb-1= room.title
+                if room.description
+                  p.text-muted.mb-2.small= room.description
+                p.text-muted.mb-0
+                  i.fas.fa-user.me-2
+                  span #{room.members.length} thành viên
+
+              if isSuperAdmin
+                .action-buttons.d-flex.gap-2
+                  a.btn.btn-sm.btn-outline-primary(href=`/room/edit/${room._id}` title="Chỉnh sửa")
+                    i.fas.fa-edit
+                  a.btn.btn-sm.btn-outline-success(href=`/room/add-member/${room._id}` title="Thêm thành viên")
+                    i.fas.fa-user-plus
+                  form(action=`/room/delete/${room._id}` method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa nhóm này?')" style="display: inline;")
+                    button.btn.btn-sm.btn-outline-danger(type="submit" title="Xóa nhóm")
+                      i.fas.fa-trash
+        //- Members List
+        .card
+          .card-header.d-flex.justify-content-between.align-items-center
+            h5.mb-0
+              i.fas.fa-users.me-2
+              | Danh sách thành viên
+
+          .card-body.p-0
+            if room.members && room.members.length > 0
+              .list-group.list-group-flush
+                each member in room.members
+                  - const userId = member.user_id._id.toString()
+                  - const isCurrentUser = userId === user.id
+
+                  .list-group-item
+                    .d-flex.align-items-center.gap-3
+                      //- Avatar
+                      .member-avatar
+                        img(
+                          src=(member.user_id.avatar || "/images/default-avatar.webp")
+                          alt=member.user_id.fullName
+                        )
+
+                      //- Info
+                      .flex-grow-1
+                        .d-flex.align-items-center.gap-2.mb-1
+                          strong= member.user_id.fullName
+
+                          if isCurrentUser
+                            span.badge.bg-secondary Bạn
+
+                          if member.role === "superAdmin"
+                            span.badge.bg-primary
+                              i.fas.fa-crown.me-1
+                              | Quản trị viên
+                          else if member.role === "admin"
+                            span.badge.bg-success
+                              i.fas.fa-shield-alt.me-1
+                              | Admin
+
+                        small.text-muted= member.user_id.email
+
+                      if isSuperAdmin && !isCurrentUser
+                        form(
+                          action=`/room/remove-member` 
+                          method="POST" 
+                          style="display: inline;"
+                          onsubmit=`return confirm('Bạn có chắc muốn xóa "${member.user_id.fullName}" khỏi nhóm?')`
+                        )
+                          input(type="hidden" name="roomId" value=room._id)
+                          input(type="hidden" name="memberId" value=userId)
+                          button.btn.btn-sm.btn-outline-danger(
+                            type="submit"
+                            title="Xóa khỏi nhóm"
+                          )
+                            i.fas.fa-user-times
+            else
+              .text-center.py-5
+                i.fas.fa-users.fa-3x.text-muted.mb-3
+                p.text-muted Chưa có thành viên nào

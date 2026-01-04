@@ -84,3 +84,80 @@ export const createPost = async (req: Request, res: Response) => {
   res.redirect(`/chat?roomId=${newRoom.id}`);
   res.send("ok");
 }
+
+// [get] /chat/detail/:id ; 
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.id;
+
+    const room = await Room.findOne({
+      _id: roomId,
+      deleted: false
+    }).populate({
+      path: "members.user_id",
+      select: "fullName avatar email"
+    });
+
+    if (!room) {
+      return res.redirect("/chat");
+    }
+
+    res.render("pages/room/detail", {
+      pageTitle: room.title,
+      room: room
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.redirect("/chat");
+  }
+};
+
+// [post] /chat/remove-member/  
+export const removeMember = async (req: Request, res: Response) => {
+
+  try {
+    const { roomId, memberId } = req.body;
+    const myId = res.locals.user.id;
+
+    const existRoom: any = await Room.findOne({
+      _id: roomId,
+      deleted: false
+    });
+
+    if (!existRoom) {
+      req.flash("error", "Phòng không tồn tại");
+      return res.redirect("/chat");
+    }
+
+    const currentMember = existRoom.members.find(
+      (member: any) => member.user_id.toString() === myId
+    );
+
+    if (currentMember.role !== "superAdmin") {
+      req.flash("error", "Bạn không có quyền xóa thành viên");
+      return res.redirect(`/room/${roomId}`);
+    }
+
+    if (memberId === myId) {
+      req.flash("error", "Không thể xóa chính mình khỏi nhóm");
+      return res.redirect(`/room/${roomId}`);
+    }
+
+
+    await Room.updateOne({
+      _id: roomId
+    }, {
+      $pull: {
+        members: { user_id: memberId }
+      }
+    });
+    req.flash("success", "Đã xóa thành viên khỏi nhóm");
+    res.redirect(`/room/detail/${roomId}`);
+
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.send("ok");
+}

@@ -819,3 +819,105 @@ emoji-picker.show {
     display: flex;
   }
 }
+
+/* css room detail */
+/* Room Detail Styles */
+/* Room Avatar */
+.room-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.room-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  color: white;
+  font-size: 32px;
+}
+
+/* Member Avatar */
+.member-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* List Item */
+.list-group-item {
+  padding: 16px 20px;
+  transition: background-color 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+  border-left-color: #667eea;
+}
+
+/* Card */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 20px;
+}
+
+/* Badges */
+.badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  font-weight: 600;
+}
+
+.badge .fa-crown,
+.badge .fa-shield-alt {
+  font-size: 10px;
+}
+
+/* Buttons */
+.btn-outline-danger:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .room-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .default-avatar {
+    font-size: 24px;
+  }
+
+  .member-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}

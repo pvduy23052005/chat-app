@@ -1,4 +1,5 @@
-mixin box-info(infoRoom)
+mixin box-info(infoRoom , roomId)
   .box-info 
     span(class = "name-user") #{infoRoom.titleRoom}
-    img(src=(infoRoom.avatarRoom ? infoRoom.avatarRoom : "/images/default-avatar.webp") alt="")
+    a(href=`/room/detail/${roomId}`) 
+      img(src=(infoRoom.avatarRoom ? infoRoom.avatarRoom : "/images/default-avatar.webp") alt="")
