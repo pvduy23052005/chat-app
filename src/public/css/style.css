@@ -36,7 +36,6 @@
 }
 
 .chat-main .chat-header .nav-header {
-  border-right: 1px solid #000;
   height: 100%;
   display: flex;
   align-items: center;
@@ -65,8 +64,8 @@
   padding-right: 20px;
 }
 
-.chat-main .chat-header h6 {
-  color: var(--color-bg-sidebar);
+.chat-main  h6 {
+  color: var(--color-button);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1135,4 +1134,21 @@ emoji-picker.show {
   background: transparent;
   margin-bottom: 0.5rem;
   width: 100%;
+}
+
+/* Tin nhắn hệ thống (Rời nhóm, Thêm thành viên...) */
+.chat-message-body .system-message {
+  text-align: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.chat-message-body .system-message span {
+  display: inline-block;
+  font-size: 12px;
+  color: #888;
+  background-color: #f0f2f5;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-style: italic;
 }

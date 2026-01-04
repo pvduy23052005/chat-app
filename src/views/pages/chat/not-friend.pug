@@ -15,11 +15,11 @@ block main
             | Tin nhắn chờ 
         if infoRoom 
           +box-info(infoRoom)
-        else
-          h6 Vui lòng chọn người muốn nhắn tin
       .chat-body 
         +chat-list-user-not-friend(users)
         .chat-box
           if infoRoom
             +chat-message-body(chats)
             +chat-message-footer()
+          else
+            h6 Vui lòng chọn người muốn nhắn tin

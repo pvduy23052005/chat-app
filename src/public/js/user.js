@@ -111,3 +111,30 @@ if (search) {
   });
 }
 // end serach user
+
+// user leave room chat
+socket.on("SERVER_USER_LEAVE_ROOM", (data) => {
+  const body = document.querySelector(".chat-message-body");
+  if (body) {
+    const div = document.createElement("div");
+    div.classList.add("system-message");
+
+    div.innerHTML = `
+      <span>${data.fullName} đã rời nhóm</span>
+    `;
+
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+  const boxRoom = document.querySelector(
+    `.box-friend[room-id="${data.room_id}"]`
+  );
+
+  if (boxRoom) {
+    const lastMessage = boxRoom.querySelector(".last-message");
+    if (lastMessage) {
+      lastMessage.innerHTML = `<i class="text-muted small">${data.fullName} đã rời nhóm</i>`;
+    }
+  }
+});
+// end user leave room chat

@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import User from '../models/user.model';
 import Room from '../models/room.model';
+import { Socket } from 'socket.io';
+import Chat from '../models/chat.model';
 
 // [get] /chat/create
 export const create = async (req: Request, res: Response) => {
@@ -309,6 +311,7 @@ export const leavePost = async (req: Request, res: Response) => {
   try {
     const roomId = (req.params.id as string);
     const myId = res.locals.user.id;
+    const fullName = res.locals.user.fullName;
 
     const room: any = await Room.findOne({ _id: roomId, deleted: false });
     if (!room) return res.redirect("/chat");
@@ -319,17 +322,30 @@ export const leavePost = async (req: Request, res: Response) => {
 
     if (myInfo && myInfo.role === "superAdmin") {
       req.flash("error", "Bạn là Trưởng nhóm duy nhất. Vui lòng chỉ định người khác làm Trưởng nhóm trước khi rời, hoặc xóa nhóm.");
-      return res.redirect(`/chat/detail/${roomId}`);
+      return res.redirect(`/room/detail/${roomId}`);
     }
 
+    const leaveMessage = new Chat({
+      room_id: roomId,
+      user_id: myId,
+      content: `${fullName} đã rời nhóm`,
+    });
+    await leaveMessage.save();
     await Room.updateOne(
       { _id: roomId },
       {
         $pull: {
           members: { user_id: myId }
-        }
+        },
+        lastMessage: leaveMessage.content,
       }
     );
+    _io.to(roomId).emit("SERVER_USER_LEAVE_ROOM", {
+      userId: myId,
+      fullName: fullName,
+      content: `${fullName} đã rời khỏi nhóm.`,
+      room_id: roomId
+    });
     res.redirect("/chat");
   } catch (error) {
     console.log(error);

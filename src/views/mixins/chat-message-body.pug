@@ -1,23 +1,37 @@
 mixin chat-message-body(chats)
   .chat-message-body 
     each chat in chats 
-      - const user_id = chat.user_id._id.toString()
-      - const time = chat.createdAt ? new Date(chat.createdAt).toLocaleTimeString("vi-VN", {hour: "2-digit", minute: "2-digit"}) : ""
-      div(
-        class = (user_id === user.id ? "inner-outgoing" : "inner-incoming")
-      )
-        if user_id !== user.id 
-          .avatar
-            img(src=(chat.user_id.avatar ? chat.user_id.avatar : "/images/default-avatar.webp" ), alt="")
-        .inner-message
-          if user_id !== user.id 
-            .name #{chat.user_id.fullName}
-          if chat.content 
-            .content #{chat.content}
-          if chat.images && chat.images.length > 0 
-            .images
-              each image in chat.images 
-                img(src= image, alt="") 
-          .inner-time #{time}
-    
-    .inner-list-typing 
+      - const isSystem = chat.content.includes("đã rời nhóm") || chat.content.includes("đã thêm thành viên") 
+
+      if isSystem
+        .system-message
+          span 
+            | #{chat.content}
+
+      else
+        if chat.user_id
+          - const user_id = chat.user_id._id.toString()
+          - const time = chat.createdAt ? new Date(chat.createdAt).toLocaleTimeString("vi-VN", {hour: "2-digit", minute: "2-digit"}) : ""
+
+          div(
+            class = (user_id === user.id ? "inner-outgoing" : "inner-incoming")
+          )
+            if user_id !== user.id 
+              .avatar
+                img(src=(chat.user_id.avatar ? chat.user_id.avatar : "/images/default-avatar.webp" ), alt="")
+
+            .inner-message
+              if user_id !== user.id 
+                .name #{chat.user_id.fullName}
+
+              if chat.content 
+                .content #{chat.content}
+
+              if chat.images && chat.images.length > 0 
+                .images
+                  each image in chat.images 
+                    img(src= image, alt="") 
+
+              .inner-time #{time}
+
+    .inner-list-typing
