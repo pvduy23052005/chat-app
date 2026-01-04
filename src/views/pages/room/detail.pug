@@ -6,24 +6,26 @@ block main
     .row.justify-content-center
       .col-12.col-lg-8
 
+        //- Alerts
         if success
           +box-success(success)
         if error
           +box-error(error)
 
+        //- Check superAdmin
         - let isSuperAdmin = false
         each member in room.members
           - const memberId = member.user_id._id.toString()
           if memberId === user.id && member.role === "superAdmin"
             - isSuperAdmin = true
 
+        //- Room Header
         .card.mb-4
           .card-body
             .d-flex.align-items-center.gap-3
               .room-avatar
-                img(src=(room.avatar ? room.avatar : "/images/default-avatar.webp" ) alt=room.title)
+                img(src=(room.avatar ? room.avatar : "/images/default-avatar.webp") alt=room.title)
 
-              //- Room Info
               .flex-grow-1
                 h3.mb-1= room.title
                 if room.description
@@ -36,11 +38,12 @@ block main
                 .action-buttons.d-flex.gap-2
                   a.btn.btn-sm.btn-outline-primary(href=`/room/edit/${room._id}` title="Chỉnh sửa")
                     i.fas.fa-edit
-                  a.btn.btn-sm.btn-outline-success(href=`/room/add-member/${room._id}` title="Thêm thành viên")
+                  button.btn.btn-sm.btn-outline-success#btn-add-member(type="button" title="Thêm thành viên")
                     i.fas.fa-user-plus
                   form(action=`/room/delete/${room._id}` method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa nhóm này?')" style="display: inline;")
                     button.btn.btn-sm.btn-outline-danger(type="submit" title="Xóa nhóm")
                       i.fas.fa-trash
+
         //- Members List
         .card
           .card-header.d-flex.justify-content-between.align-items-center
@@ -57,14 +60,12 @@ block main
 
                   .list-group-item
                     .d-flex.align-items-center.gap-3
-                      //- Avatar
                       .member-avatar
                         img(
                           src=(member.user_id.avatar || "/images/default-avatar.webp")
                           alt=member.user_id.fullName
                         )
 
-                      //- Info
                       .flex-grow-1
                         .d-flex.align-items-center.gap-2.mb-1
                           strong= member.user_id.fullName
@@ -85,19 +86,79 @@ block main
 
                       if isSuperAdmin && !isCurrentUser
                         form(
-                          action=`/room/remove-member` 
+                          action="/room/remove-member" 
                           method="POST" 
                           style="display: inline;"
                           onsubmit=`return confirm('Bạn có chắc muốn xóa "${member.user_id.fullName}" khỏi nhóm?')`
                         )
                           input(type="hidden" name="roomId" value=room._id)
                           input(type="hidden" name="memberId" value=userId)
-                          button.btn.btn-sm.btn-outline-danger(
-                            type="submit"
-                            title="Xóa khỏi nhóm"
-                          )
+                          button.btn.btn-sm.btn-outline-danger(type="submit" title="Xóa khỏi nhóm")
                             i.fas.fa-user-times
             else
               .text-center.py-5
                 i.fas.fa-users.fa-3x.text-muted.mb-3
                 p.text-muted Chưa có thành viên nào
+
+      //- Sidebar Add Member (bên phải)
+      .col-12.col-lg-4
+        .add-member-sidebar#add-member-sidebar
+          .card
+            .card-header.bg-primary.text-white.d-flex.justify-content-between.align-items-center
+              h5.mb-0
+                i.fas.fa-user-plus.me-2
+                | Thêm thành viên
+              button.btn.btn-sm.btn-close.btn-close-white#btn-close-sidebar(type="button")
+
+            .card-body
+              form(action=`/room/add-member/${room._id}` method="POST")
+                input(type="hidden" name="roomId" value=room._id)
+
+                if friends && friends.length > 0
+                  .friends-list
+                    each friend in friends
+                      .box-user-select.mb-2
+                        input(
+                          type="checkbox" 
+                          name="memberIds" 
+                          value=friend._id 
+                          id=`friend-${friend._id}`
+                        )
+                        label(for=`friend-${friend._id}`)
+                          .inner-avatar
+                            img(
+                              src=(friend.avatar ? friend.avatar : "/images/default-avatar.webp")
+                              alt=friend.fullName
+                            )
+                          .inner-name #{friend.fullName}
+
+                  .mt-3
+                    button.btn.btn-primary.w-100(type="submit")
+                      i.fas.fa-plus.me-2
+                      | Thêm vào nhóm
+                else
+                  .alert.alert-warning
+                    i.fas.fa-exclamation-triangle.me-2
+                    | Không có bạn bè để thêm
+
+  //- JavaScript
+  script.
+    const btnAddMember = document.getElementById('btn-add-member');
+    const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+    const sidebar = document.getElementById('add-member-sidebar');
+
+    if (btnAddMember) {
+      btnAddMember.addEventListener('click', function() {
+        sidebar.style.display = 'block';
+        sidebar.style.animation = 'slideInRight 0.3s ease';
+      });
+    }
+
+    if (btnCloseSidebar) {
+      btnCloseSidebar.addEventListener('click', function() {
+        sidebar.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          sidebar.style.display = 'none';
+        }, 300);
+      });
+    }

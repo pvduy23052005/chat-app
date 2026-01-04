@@ -6,8 +6,10 @@ router.get("/create", controller.create);
 
 router.post("/create", controller.createPost);
 
-router.get("/detail/:id" , controller.detail);
+router.get("/detail/:id", controller.detail);
 
-router.post("/remove-member" , controller.removeMember);
+router.post("/remove-member", controller.removeMember);
 
-export const roomRoute: Router = router;  
+router.post("/add-member/:id", controller.addMember);
+
+export const roomRoute: Router = router; 

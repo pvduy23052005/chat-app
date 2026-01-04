@@ -82,13 +82,13 @@ export const createPost = async (req: Request, res: Response) => {
   await newRoom.save();
   req.flash("success", "Tạo thành công");
   res.redirect(`/chat?roomId=${newRoom.id}`);
-  res.send("ok");
 }
 
 // [get] /chat/detail/:id ; 
 export const detail = async (req: Request, res: Response) => {
   try {
     const roomId = req.params.id;
+    const listFriend = res.locals.user.friendList;
 
     const room = await Room.findOne({
       _id: roomId,
@@ -102,9 +102,22 @@ export const detail = async (req: Request, res: Response) => {
       return res.redirect("/chat");
     }
 
+    const existMeberId = room.members.map((member: any) => member.user_id._id.toString());
+    const friendIds: string[] = listFriend.map((item: any) => item.user_id);
+
+    const friends = await User.find({
+      $and: [
+        { _id: { $in: friendIds } },
+        { _id: { $nin: existMeberId } },
+        { deleted: false }
+      ]
+    }).select("fullName avatar");
+
+
     res.render("pages/room/detail", {
       pageTitle: room.title,
-      room: room
+      room: room,
+      friends: friends,
     });
 
   } catch (error) {
@@ -154,10 +167,60 @@ export const removeMember = async (req: Request, res: Response) => {
     });
     req.flash("success", "Đã xóa thành viên khỏi nhóm");
     res.redirect(`/room/detail/${roomId}`);
-
   } catch (error) {
     console.log(error);
   }
+}
 
-  res.send("ok");
+// [post] /chat/add-member/:id  
+export const addMember = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.id;
+    let { memberIds } = req.body;
+
+    const room = await Room.findOne({
+      _id: roomId,
+      deleted: false
+    })
+
+    if (!room) {
+      return res.redirect(`/room/detail/${roomId}`);
+
+    }
+
+    if (!memberIds) {
+      return res.redirect(`/room/detail/${roomId}`);
+
+    }
+
+    if (!Array.isArray(memberIds)) {
+      memberIds = [memberIds];
+    }
+
+    const listNewMembers = memberIds.map((userId: string) => {
+      return {
+        user_id: userId,
+        role: "member",
+        status: "accepted"
+      };
+    });
+
+    await Room.updateOne(
+      {
+        _id: roomId,
+        deleted: false
+      },
+      {
+        $push: {
+          members: { $each: listNewMembers }
+        }
+      }
+    );
+
+    req.flash("success", "Thêm thành công");
+    res.redirect(`/room/detail/${roomId}`);
+  } catch (error) {
+    console.log(error);
+
+  }
 }
