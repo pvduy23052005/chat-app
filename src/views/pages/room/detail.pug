@@ -32,13 +32,23 @@ block main
                   action=`/room/edit/${room._id}` 
                   method="POST"
                 )
-                  input.form-control.input-title-edit(
-                    type="text" 
-                    name="title" 
-                    value=room.title
-                    required
-                    placeholder="Tên phòng"
-                  )
+                  if room.typeRoom  === "group"
+                    input.form-control.input-title-edit(
+                      type="text" 
+                      name="title" 
+                      value=room.title
+                      required
+                      placeholder="Tên phòng"
+                    )
+                  else 
+                    input.form-control.input-title-edit(
+                      type="text" 
+                      name="title" 
+                      value=room.title
+                      required
+                      placeholder="Tên phòng"
+                      readonly
+                    )
 
                   p.text-muted.mb-0.mt-1
                     i.fas.fa-user.me-2
@@ -69,6 +79,16 @@ block main
             h5.mb-0
               i.fas.fa-users.me-2
               | Danh sách thành viên
+            if room.typeRoom === "group"
+              form(
+                action=`/room/leave/${room._id}` 
+                method="POST" 
+                onsubmit="return confirm('Bạn có chắc chắn muốn rời khỏi nhóm này?')"
+              )
+                button.btn.btn-sm.btn-outline-danger(type="submit")
+                  i.fa-solid.fa-right-from-bracket.me-1
+                  | Rời nhóm
+
 
           .card-body.p-0
             if room.members && room.members.length > 0

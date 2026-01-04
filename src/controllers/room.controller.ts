@@ -303,3 +303,35 @@ export const editPost = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+// [post] /room/leave/:id
+export const leavePost = async (req: Request, res: Response) => {
+  try {
+    const roomId = (req.params.id as string);
+    const myId = res.locals.user.id;
+
+    const room: any = await Room.findOne({ _id: roomId, deleted: false });
+    if (!room) return res.redirect("/chat");
+
+    const myInfo = room.members.find(
+      (member: any) => member.user_id.toString() === myId
+    );
+
+    if (myInfo && myInfo.role === "superAdmin") {
+      req.flash("error", "Bạn là Trưởng nhóm duy nhất. Vui lòng chỉ định người khác làm Trưởng nhóm trước khi rời, hoặc xóa nhóm.");
+      return res.redirect(`/chat/detail/${roomId}`);
+    }
+
+    await Room.updateOne(
+      { _id: roomId },
+      {
+        $pull: {
+          members: { user_id: myId }
+        }
+      }
+    );
+    res.redirect("/chat");
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -16,4 +16,6 @@ router.post("/delete/:id", controller.deletePost);
 
 router.post("/edit/:id", controller.editPost);
 
+router.post("/leave/:id" , controller.leavePost);
+
 export const roomRoute: Router = router; 
