@@ -224,3 +224,46 @@ export const addMember = async (req: Request, res: Response) => {
 
   }
 }
+
+// [post] /chat/delete/:id
+export const deletePost = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.id;
+    const myId = res.locals.user.id;
+
+    const room: any = await Room.findOne({
+      _id: roomId,
+      deleted: false
+    });
+
+    if (!room) {
+      req.flash("error", "Phòng không tồn tại!");
+      return res.redirect("/chat");
+    }
+
+    const myInfo = room.members.find(
+      (member: any) => member.user_id.toString() === myId
+    );
+
+    if (!myInfo || myInfo.role !== "superAdmin") {
+      req.flash("error", "Bạn không có quyền xóa phòng này!");
+      return res.redirect("back");
+    }
+
+    await Room.updateOne(
+      { _id: roomId },
+      {
+        deleted: true,
+        deletedAt: new Date()
+      }
+    );
+
+    req.flash("success", "Đã xóa phòng chat thành công!");
+    res.redirect("/chat");
+
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Lỗi xóa phòng!");
+    res.redirect("/chat");
+  }
+};

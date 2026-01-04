@@ -12,4 +12,6 @@ router.post("/remove-member", controller.removeMember);
 
 router.post("/add-member/:id", controller.addMember);
 
+router.post("/delete/:id", controller.deletePost);
+
 export const roomRoute: Router = router; 

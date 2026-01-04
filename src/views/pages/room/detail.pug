@@ -27,20 +27,46 @@ block main
                 img(src=(room.avatar ? room.avatar : "/images/default-avatar.webp") alt=room.title)
 
               .flex-grow-1
-                h3.mb-1= room.title
-                if room.description
-                  p.text-muted.mb-2.small= room.description
-                p.text-muted.mb-0
-                  i.fas.fa-user.me-2
-                  span #{room.members.length} thành viên
+                form(
+                  id="form-edit-room" 
+                  action=`/room/edit/${room._id}` 
+                  method="POST"
+                )
+                  input.form-control.input-title-edit(
+                    type="text" 
+                    name="title" 
+                    value=room.title
+                    required
+                    placeholder="Tên phòng"
+                  )
+
+                  input.form-control.input-desc-edit(
+                    type="text" 
+                    name="description" 
+                    value=room.description 
+                    placeholder="Thêm mô tả..."
+                  )
+
+                  p.text-muted.mb-0.mt-1
+                    i.fas.fa-user.me-2
+                    span #{room.members.length} thành viên
 
               if isSuperAdmin
                 .action-buttons.d-flex.gap-2
-                  a.btn.btn-sm.btn-outline-primary(href=`/room/edit/${room._id}` title="Chỉnh sửa")
-                    i.fas.fa-edit
+                  button.btn.btn-sm.btn-outline-primary(
+                    type="submit" 
+                    form="form-edit-room" 
+                    title="Lưu thay đổi"
+                  )
+                    i.fas.fa-save 
                   button.btn.btn-sm.btn-outline-success#btn-add-member(type="button" title="Thêm thành viên")
                     i.fas.fa-user-plus
-                  form(action=`/room/delete/${room._id}` method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa nhóm này?')" style="display: inline;")
+                  form(
+                    action=`/room/delete/${room._id}` 
+                    method="POST" 
+                    onsubmit="return confirm('Bạn có chắc muốn xóa nhóm này?')" 
+                    style="display: inline;"
+                  )
                     button.btn.btn-sm.btn-outline-danger(type="submit" title="Xóa nhóm")
                       i.fas.fa-trash
 
