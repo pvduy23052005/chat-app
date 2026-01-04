@@ -12,7 +12,7 @@ mixin chat-list-user(users)
         .inner-content 
           span(class = "name") #{(user.fullName ?user.fullName : user.title )} 
           span(class = "last-message") 
-            | #{user.lastMessage ? (user.lastMessage.length > 20 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
+            | #{user.lastMessage ? (user.lastMessage.length > 25 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
         .inner-status(status=user.statusOnline)
           i.fa-solid.fa-circle
 

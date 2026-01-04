@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
-import Chat from "../models/chat.model";
-import User from "../models/user.model";
 import getInfoRoom from "../helpers/getInfoRoom.helper";
 import getRoomUser from "../helpers/getRoomUser.helper";
 import getRoomGroup from "../helpers/getRoomGroup.helper";
-
+import getChat from "../helpers/getChat.helper";
 
 // [get] /chat?roomId; 
 export const index = async (req: Request, res: Response) => {
@@ -34,16 +32,7 @@ export const index = async (req: Request, res: Response) => {
     });
 
     if (roomId) {
-      chats = await Chat.find({
-        room_id: roomId,
-        deleted: false
-      })
-        .sort({ createdAt: 1 })
-        .populate({
-          path: "user_id",
-          select: "fullName avatar"
-        });
-
+      chats = await getChat(roomId);
       const objectRoom = await getInfoRoom(req, res);
       if (objectRoom) {
         infoRoom = objectRoom;
@@ -71,16 +60,7 @@ export const chatNotFriend = async (req: Request, res: Response) => {
     const users = await getRoomUser(res, "waiting");
 
     if (roomId) {
-      chats = await Chat.find({
-        deleted: false,
-        room_id: roomId
-      });
-      for (let chat of chats) {
-        const user = await User.findOne({
-          _id: chat.user_id,
-        }).select("fullName");
-        chat.fullName = user?.fullName;
-      }
+      chats = await getChat(roomId);
       const objectRoom = await getInfoRoom(req, res);
       if (objectRoom) {
         infoRoom = objectRoom;

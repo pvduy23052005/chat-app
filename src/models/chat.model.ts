@@ -10,6 +10,7 @@ const chatSchema = new mongoose.Schema({
   },
   content: {
     type: String,
+    default: ""
   },
   images: {
     type: Array,

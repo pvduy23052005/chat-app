@@ -37,7 +37,8 @@ const chatSocket = async (io: Server, socket: Socket) => {
     await Room.updateOne({
       _id: roomId
     }, {
-      lastMessage: data.message ? data.message : "Đã gửi một ảnh"
+      lastMessageId: newChat.id,
+      updatedAt: new Date(),
     });
 
     // server emit event . 

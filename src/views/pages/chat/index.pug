@@ -20,7 +20,10 @@ block main
         if infoRoom 
           +box-info(infoRoom , roomId)
       .chat-body 
-        +chat-list-user(allRooms)
+        if allRooms
+          +chat-list-user(allRooms)
+        else 
+          h6 Vui lòng ấn vào người dùng để có thể nhắn tin
         .chat-box
           if infoRoom
             +chat-message-body(chats)

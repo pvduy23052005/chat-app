@@ -11,28 +11,38 @@ interface GroupChat {
 }
 
 const getRoomGroup = async (res: Response): Promise<GroupChat[]> => {
-  const userLogined = res.locals.user.id as string;
+  try {
+    const userLogined = res.locals.user.id as string;
 
-  const rooms: any = await Room.find({
-    typeRoom: "group",
-    "members.user_id": userLogined,
-    deleted: false,
-  }).sort({ updatedAt: -1 }).lean();
+    const rooms: any = await Room.find({
+      typeRoom: "group",
+      "members.user_id": userLogined,
+      deleted: false,
+    })
+      .sort({ updatedAt: -1 })
+      .lean()
+      .populate({
+        path: "lastMessageId",
+        select: "content"
+      });
 
-  const allRooms = rooms.map((item: any): GroupChat | null => {
-    return {
-      title: item.title || "Không có tiều đề",
-      avatar: item.avatar,
-      typeRoom: item.typeRoom,
-      room_chat_id: item._id.toString(),
-      lastMessage: item.lastMessage || "",
-      updatedAt: item.updatedAt,
-    }
-  }).filter((item: GroupChat) => item != null);
+    const allRooms = rooms.map((item: any): GroupChat => {
+      return {
+        title: item.title || "Nhóm không tên",
+        avatar: item.avatar || "/images/default-avatar.webp",
+        typeRoom: item.typeRoom,
+        room_chat_id: item._id.toString(),
+        lastMessage: item.lastMessageId ? item.lastMessageId.content : "Bắt đầu cuộc trò chuyện",
+        updatedAt: item.updatedAt,
+      };
+    });
 
-  return allRooms;
+    return allRooms;
+
+  } catch (error) {
+    console.log("Lỗi lấy danh sách nhóm:", error);
+    return [];
+  }
 };
 
-
 export default getRoomGroup;
-

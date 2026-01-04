@@ -16,7 +16,10 @@ block main
         if infoRoom 
           +box-info(infoRoom)
       .chat-body 
-        +chat-list-user-not-friend(users)
+        if users
+          +chat-list-user-not-friend(users)
+        else 
+          h6 Bạn ko có tin nhắn chờ nào
         .chat-box
           if infoRoom
             +chat-message-body(chats)

@@ -3,7 +3,6 @@ import http from "http";
 import authSokcet from "./middlewares/authSocket.middwares";
 import userSocket from "./handlers/user.socket";
 import chatSocket from "./handlers/chat.socket";
-import User from "../models/user.model";
 
 const socketConfig = (server: http.Server): Server => {
   const io = new Server(server, {

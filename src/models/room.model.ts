@@ -27,9 +27,9 @@ const userSchema = new mongoose.Schema({
       }
     }
   ],
-  lastMessage: {
-    type: String,
-    default: ""
+  lastMessageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref : "Chat"
   },
   deleted: {
     type: Boolean,
