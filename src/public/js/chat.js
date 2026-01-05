@@ -73,7 +73,9 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   if (bodyChatList) {
     let boxUser = null;
     if (myId == data.user_id) {
-      boxUser = bodyChatList.querySelector(".box-friend.active");
+      boxUser = bodyChatList.querySelector(
+        `.box-friend[room-id="${data.room_id}"]`
+      );
     } else {
       boxUser = bodyChatList.querySelector(`[room-id="${data.room_id}"]`);
     }
@@ -235,7 +237,6 @@ if (listTyping) {
     }
   });
 }
-
 // end typing .
 
 const btnIcon = document.querySelector(".chat-main #chat-form .btn-icon");
@@ -265,73 +266,3 @@ if (chatBox) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 // end scrollBody
-
-
-
-const chatBody = document.querySelector(".chat-message-body");
-let skip = 10; // Mặc định ban đầu đã load 10 tin (từ server-side rendering)
-let isLoading = false; // Cờ để tránh gửi 2 request cùng lúc
-let hasMore = true; // Cờ kiểm tra xem còn tin cũ không
-
-if (chatBody) {
-  // Tự động cuộn xuống đáy khi mới vào
-  chatBody.scrollTop = chatBody.scrollHeight;
-
-  chatBody.addEventListener("scroll", async () => {
-    // 1. Kiểm tra: Nếu cuộn lên đỉnh (scrollTop = 0) VÀ chưa đang load VÀ còn dữ liệu
-    if (chatBody.scrollTop === 0 && !isLoading && hasMore) {
-      isLoading = true;
-
-      // Lấy roomId từ URL
-      const roomId = new URLSearchParams(window.location.search).get("roomId");
-      
-      // 2. Lưu lại chiều cao hiện tại trước khi chèn tin mới
-      // (Để sau khi chèn xong thì chỉnh lại thanh cuộn cho không bị nhảy)
-      const oldScrollHeight = chatBody.scrollHeight;
-
-      // 3. Gọi API
-      const response = await fetch(`/chat/load-more?roomId=${roomId}&skip=${skip}`);
-      const result = await response.json();
-
-      if (result.code === 200 && result.data.length > 0) {
-        // Tăng biến skip để lần sau load tiếp
-        skip += result.data.length;
-
-        // 4. Vẽ HTML từ dữ liệu JSON (Logic giống hệt phần Socket.IO)
-        // Lưu ý: Bạn nên tách hàm renderMessage ra để tái sử dụng
-        const tempDiv = document.createElement("div");
-        
-        result.data.forEach(chat => {
-          // --- LOGIC VẼ HTML (Copy logic từ phần Socket của bạn vào đây) ---
-          const myId = document.querySelector("[my-id]").getAttribute("my-id");
-          const isMe = (chat.user_id._id === myId);
-          
-          let html = `
-            <div class="${isMe ? 'inner-outgoing' : 'inner-incoming'}">
-              ${!isMe ? `<div class="avatar"><img src="${chat.user_id.avatar || '/images/default-avatar.webp'}"></div>` : ''}
-              <div class="inner-message">
-                 ${!isMe ? `<div class="name">${chat.user_id.fullName}</div>` : ''}
-                 ${chat.content ? `<div class="content">${chat.content}</div>` : ''}
-                 </div>
-            </div>
-          `;
-          tempDiv.insertAdjacentHTML("beforeend", html);
-        });
-
-        // 5. Chèn tin nhắn cũ lên ĐẦU danh sách
-        chatBody.prepend(...tempDiv.children);
-
-        // 6. QUAN TRỌNG: Chỉnh lại thanh cuộn
-        // Vị trí mới = Chiều cao mới - Chiều cao cũ
-        // Điều này giúp mắt người dùng vẫn nhìn thấy tin nhắn hiện tại, không bị đẩy tuốt xuống dưới
-        chatBody.scrollTop = chatBody.scrollHeight - oldScrollHeight;
-      
-      } else {
-        // Nếu trả về mảng rỗng nghĩa là hết tin nhắn cũ rồi
-        hasMore = false; 
-      }
-
-      isLoading = false;
-    }
-  });
-}

@@ -138,3 +138,38 @@ socket.on("SERVER_USER_LEAVE_ROOM", (data) => {
   }
 });
 // end user leave room chat
+
+// user add members
+socket.on("SERVER_ADD_USER", (data) => {
+  const body = document.querySelector(".chat-message-body");
+  const boxRoom = document.querySelector(
+    `.box-friend[room-id="${data.room_id}"]`
+  );
+  const bodyChatList = document.querySelector(".chat-list-friend");
+  const currentRoomId = new URLSearchParams(window.location.search).get(
+    "roomId"
+  );
+
+  if (body) {
+    const div = document.createElement("div");
+    div.classList.add("system-message");
+    div.innerHTML = `<span>${data.content}</span>`;
+
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  if (data.room_id === currentRoomId) {
+    if (boxRoom) {
+      const lastMessage = boxRoom.querySelector(".last-message");
+      const message =
+        data.content.length > 22
+          ? data.content.slice(0, 22) + "..."
+          : data.content;
+
+      lastMessage.innerHTML = `<i class="text-muted small">${message}</i>`;
+      bodyChatList.prepend(boxRoom);
+    }
+  }
+});
+// end  user add members

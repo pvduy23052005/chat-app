@@ -1,7 +1,6 @@
 import { Response, Request } from 'express';
 import User from '../models/user.model';
 import Room from '../models/room.model';
-import { Socket } from 'socket.io';
 import Chat from '../models/chat.model';
 
 // [get] /chat/create
@@ -177,8 +176,10 @@ export const removeMember = async (req: Request, res: Response) => {
 // [post] /chat/add-member/:id  
 export const addMember = async (req: Request, res: Response) => {
   try {
-    const roomId = req.params.id;
+    const roomId = (req.params.id as string) || "";
     let { memberIds } = req.body;
+    const myId = res.locals.user.id as string;
+    const fullName = res.locals.user.fullName as string;
 
     const room = await Room.findOne({
       _id: roomId,
@@ -187,12 +188,10 @@ export const addMember = async (req: Request, res: Response) => {
 
     if (!room) {
       return res.redirect(`/room/detail/${roomId}`);
-
     }
 
     if (!memberIds) {
       return res.redirect(`/room/detail/${roomId}`);
-
     }
 
     if (!Array.isArray(memberIds)) {
@@ -207,6 +206,18 @@ export const addMember = async (req: Request, res: Response) => {
       };
     });
 
+    const userAdded = await User.find({
+      _id: { $in: memberIds }
+    }).select("fullName");
+    const nameAdded = userAdded.map((user: any) => user.fullName).join(", ");
+    const message = `${fullName} đã thêm ${nameAdded} vào nhóm`;
+    const addMessage = new Chat({
+      user_id: myId,
+      room_id: roomId,
+      content: message
+    });
+    await addMessage.save();
+
     await Room.updateOne(
       {
         _id: roomId,
@@ -215,15 +226,22 @@ export const addMember = async (req: Request, res: Response) => {
       {
         $push: {
           members: { $each: listNewMembers }
-        }
+        },
+        lastMessageId: addMessage.id
       }
     );
+
+    _io.to(roomId).emit("SERVER_ADD_USER", {
+      room_id: roomId,
+      content: message,
+      fullName: fullName,
+      userId: myId
+    });
 
     req.flash("success", "Thêm thành công");
     res.redirect(`/room/detail/${roomId}`);
   } catch (error) {
     console.log(error);
-
   }
 }
 
