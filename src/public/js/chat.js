@@ -1,15 +1,18 @@
 import { FileUploadWithPreview } from "https://unpkg.com/file-upload-with-preview/dist/index.js";
 
-const upload = new FileUploadWithPreview("upload-images", {
-  multiple: true,
-  maxFileCount: 10,
-  text: {
-    chooseFile: "Chọn ảnh...",
-    browse: "Chọn ảnh",
-    selectedCount: "ảnh đã chọn",
-  },
-});
-
+const uploadImages = document.querySelector("[data-upload-id]");
+let upload;
+if (uploadImages) {
+  upload = new FileUploadWithPreview("upload-images", {
+    multiple: true,
+    maxFileCount: 10,
+    text: {
+      chooseFile: "Chọn ảnh...",
+      browse: "Chọn ảnh",
+      selectedCount: "ảnh đã chọn",
+    },
+  });
+}
 // Convert file to base64
 
 function fileToBase64(file) {
@@ -68,23 +71,17 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     "roomId"
   );
   const myId = document.querySelector("[my-id]").getAttribute("my-id");
-
   const bodyChatList = document.querySelector(".chat-list-friend");
+  const boxUser = bodyChatList.querySelector(
+    `.box-friend[room-id="${data.room_id}"]`
+  );
   if (bodyChatList) {
-    let boxUser = null;
-    if (myId == data.user_id) {
-      boxUser = bodyChatList.querySelector(
-        `.box-friend[room-id="${data.room_id}"]`
-      );
-    } else {
-      boxUser = bodyChatList.querySelector(`[room-id="${data.room_id}"]`);
-    }
     if (boxUser) {
       const prefix = data.user_id === myId ? "Bạn: " : `${data.fullName}: `;
       const boxLastMessage = boxUser.querySelector(".last-message");
       const messageToShow = data.content ? data.content : "Đã gửi một ảnh";
       let fullText = `${prefix}${messageToShow}`;
-      if (fullText.length > 30) {
+      if (fullText.length > 25) {
         fullText = fullText.slice(0, 25) + "...";
       }
       boxLastMessage.innerHTML = fullText;
