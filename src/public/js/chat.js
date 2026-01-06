@@ -245,7 +245,6 @@ if (btnIcon) {
 }
 // send icon .
 const boxIcon = document.querySelector("emoji-picker");
-
 if (boxIcon) {
   boxIcon.addEventListener("emoji-click", (e) => {
     const chatInput = document.querySelector(

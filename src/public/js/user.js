@@ -140,7 +140,7 @@ socket.on("SERVER_USER_LEAVE_ROOM", (data) => {
 // end user leave room chat
 
 // user add members
-socket.on("SERVER_ADD_USER", (data) => {
+socket.on("SERVER_ADD_OR_REMOVE_USER", (data) => {
   const body = document.querySelector(".chat-message-body");
   const boxRoom = document.querySelector(
     `.box-friend[room-id="${data.room_id}"]`
@@ -150,7 +150,7 @@ socket.on("SERVER_ADD_USER", (data) => {
     "roomId"
   );
 
-  if (body) {
+  if (body && data.room_id === currentRoomId) {
     const div = document.createElement("div");
     div.classList.add("system-message");
     div.innerHTML = `<span>${data.content}</span>`;
@@ -159,17 +159,15 @@ socket.on("SERVER_ADD_USER", (data) => {
     body.scrollTop = body.scrollHeight;
   }
 
-  if (data.room_id === currentRoomId) {
-    if (boxRoom) {
-      const lastMessage = boxRoom.querySelector(".last-message");
-      const message =
-        data.content.length > 22
-          ? data.content.slice(0, 22) + "..."
-          : data.content;
+  if (boxRoom) {
+    const lastMessage = boxRoom.querySelector(".last-message");
+    const message =
+      data.content.length > 25
+        ? data.content.slice(0, 25) + "..."
+        : data.content;
 
-      lastMessage.innerHTML = `<i class="text-muted small">${message}</i>`;
-      bodyChatList.prepend(boxRoom);
-    }
+    lastMessage.innerHTML = `<i class="text-muted small">${message}</i>`;
+    bodyChatList.prepend(boxRoom);
   }
 });
 // end  user add members

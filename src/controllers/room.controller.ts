@@ -133,6 +133,7 @@ export const removeMember = async (req: Request, res: Response) => {
   try {
     const { roomId, memberId } = req.body;
     const myId = res.locals.user.id;
+    const fullName = res.locals.user.fullName;
 
     const existRoom: any = await Room.findOne({
       _id: roomId,
@@ -158,6 +159,18 @@ export const removeMember = async (req: Request, res: Response) => {
       return res.redirect(`/room/${roomId}`);
     }
 
+    const userAdded = await User.find({
+      _id: { $in: memberId }
+    }).select("fullName");
+    const nameAdded = userAdded.map((user: any) => user.fullName).join(", ");
+    const message = `${fullName} đã xóa ${nameAdded} khỏi nhóm`;
+    const removeMessage = new Chat({
+      user_id: myId,
+      room_id: roomId,
+      content: message
+    });
+    await removeMessage.save();
+
 
     await Room.updateOne({
       _id: roomId
@@ -166,6 +179,14 @@ export const removeMember = async (req: Request, res: Response) => {
         members: { user_id: memberId }
       }
     });
+
+    _io.to(roomId).emit("SERVER_ADD_OR_REMOVE_USER", {
+      room_id: roomId,
+      content: message,
+      fullName: fullName,
+      userId: myId
+    });
+
     req.flash("success", "Đã xóa thành viên khỏi nhóm");
     res.redirect(`/room/detail/${roomId}`);
   } catch (error) {
@@ -231,7 +252,7 @@ export const addMember = async (req: Request, res: Response) => {
       }
     );
 
-    _io.to(roomId).emit("SERVER_ADD_USER", {
+    _io.to(roomId).emit("SERVER_ADD_OR_REMOVE_USER", {
       room_id: roomId,
       content: message,
       fullName: fullName,
@@ -355,7 +376,7 @@ export const leavePost = async (req: Request, res: Response) => {
         $pull: {
           members: { user_id: myId }
         },
-        lastMessage: leaveMessage.content,
+        lastMessageId: leaveMessage.id,
       }
     );
     _io.to(roomId).emit("SERVER_USER_LEAVE_ROOM", {

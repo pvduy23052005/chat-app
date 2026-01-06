@@ -1,7 +1,7 @@
 mixin chat-message-body(chats)
   .chat-message-body 
     each chat in chats 
-      - const isSystem = chat.content.includes("đã rời nhóm") || chat.content.includes("đã thêm") 
+      - const isSystem = chat.content.includes("đã rời nhóm") || chat.content.includes("đã thêm") || chat.content.includes("đã xóa")
 
       if isSystem
         .system-message
