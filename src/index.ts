@@ -10,10 +10,10 @@ import flash from "express-flash";
 import session from "express-session";
 import cookieParser from "cookie-parser"
 
-const port: number | string | undefined = process.env.PORT;
+const port: number | string | undefined = process.env.PORT || 5000;
 const app: Express = express();
 
-// congif socket.io
+// config socket.io 
 const server = http.createServer(app);
 
 app.set('views', path.join(__dirname, 'views'));

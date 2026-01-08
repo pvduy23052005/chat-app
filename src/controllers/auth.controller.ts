@@ -3,6 +3,8 @@ import User from "../models/user.model";
 import md5 from "md5";
 import { Socket } from "socket.io";
 import * as random from "../helpers/random";
+import jwt from "jsonwebtoken";
+
 
 // [get] /auth/login . 
 export const login = async (req: Request, res: Response) => {
@@ -25,7 +27,6 @@ export const loginPost = async (req: Request, res: Response) => {
     }
     if (!user) {
       req.flash("error", "Email không chính xác");
-      console.log("chat vao day ")
       return res.redirect("/auth/login");
     }
     if (user.password != md5(password)) {
@@ -33,10 +34,25 @@ export const loginPost = async (req: Request, res: Response) => {
       return res.redirect("/auth/login");
     }
 
-    res.cookie("token", user.token);
+    const payload = {
+      userId: user.id,
+    }
+
+    const token = jwt.sign(
+      payload,
+      process.env.ACCESS_TOKEN_SECRET as string, {
+      expiresIn: "15m"
+    })
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      path: "/",
+      sameSite: "lax"
+    });
 
     await User.updateOne({
-      token: user.token
+      _id: user.id
     }, {
       statusOnline: "online"
     });

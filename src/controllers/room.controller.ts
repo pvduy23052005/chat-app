@@ -204,7 +204,8 @@ export const addMember = async (req: Request, res: Response) => {
 
     const room = await Room.findOne({
       _id: roomId,
-      deleted: false
+      deleted: false,
+      typeRoom: "group"
     })
 
     if (!room) {

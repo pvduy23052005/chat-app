@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
+import jwt from 'jsonwebtoken';
 
 const authMiddleware = async (
   req: Request,
@@ -14,13 +15,16 @@ const authMiddleware = async (
       return res.redirect("/auth/login");
     }
 
-    const user = await User.findOne({ token }).select("-password");
+    const data = (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string)) as { userId: string }
 
+    const user = await User.findOne({
+      _id: data.userId,
+      deleted: false,
+    }).select("-password");
     if (!user) {
       req.flash("error", "Vui lòng thử lại");
       return res.redirect("/auth/login");
     }
-
     res.locals.user = user;
     next();
   } catch (error) {
