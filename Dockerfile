@@ -1,5 +1,8 @@
 # 1. Chọn Base Image (Node 18 bản nhẹ)
-FROM node:22-alpine
+FROM node:18-alpine
+
+RUN apk add --no-cache tzdata
+ENV TZ=Asia/Ho_Chi_Minh
 
 # 2. Thiết lập thư mục làm việc trong container
 WORKDIR /app
