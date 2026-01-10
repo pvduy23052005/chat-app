@@ -9,6 +9,7 @@ const indexRoute = (app: Express) => {
 
   app.use("/auth", authRoute);
 
+  app.use("/", authMiddleware, chatRoute)
   app.use("/chat", authMiddleware, chatRoute);
 
   app.use("/user", authMiddleware, userRoute);

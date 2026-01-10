@@ -41,7 +41,7 @@ export const loginPost = async (req: Request, res: Response) => {
     const token = jwt.sign(
       payload,
       process.env.ACCESS_TOKEN_SECRET as string, {
-      expiresIn: "15m"
+      expiresIn: "1h"
     })
 
     res.cookie("token", token, {
@@ -99,12 +99,10 @@ export const registerPost = async (req: Request, res: Response) => {
       email: email,
       password: password,
       statusOffline: "offline",
-      token: random.randomString(20)
     };
 
     const newUser = new User(userObject);
     newUser.save();
-    res.cookie("token", newUser.token);
 
     req.flash("success", "Vui lòng đăng nhập");
     res.redirect("/auth/login");

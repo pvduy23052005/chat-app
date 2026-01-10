@@ -18,10 +18,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  token: {
-    type: String,
-    default: random.randomString(20)
-  },
   friendRequests: {
     type: Array,
     default: []

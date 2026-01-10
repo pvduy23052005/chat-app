@@ -23,7 +23,7 @@ const authSokcet = async (socket: Socket, next: any) => {
       _id: data.userId,
       deleted: false
     }).select("-password");
-    
+
     if (!user) {
       return next(new Error("error"));
     }

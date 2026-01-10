@@ -22,14 +22,19 @@ const chatSocket = async (io: Server, socket: Socket) => {
 
   // server on event .
   socket.on("CLIENT_SEND_MESSAGE", async (data) => {
-    const images = data.images;
-    const imageUrls = await uploadCloud(images);
+    // file [ image , pdf , doc ] ;
+    const files = data.images;
     const roomId = data.roomId;
+    let fileUrls: string[] = [];
+
+    if (files && files.length > 0) {
+      fileUrls = await uploadCloud(files);
+    }
 
     const newChat = new Chat({
       user_id: userLogined,
       content: data.message,
-      images: imageUrls,
+      images: fileUrls,
       room_id: roomId
     });
     await newChat.save();
@@ -46,7 +51,7 @@ const chatSocket = async (io: Server, socket: Socket) => {
       user_id: userLogined,
       fullName: fullName,
       content: data.message,
-      images: imageUrls,
+      fileUrls: fileUrls,
       room_id: roomId
     })
   });

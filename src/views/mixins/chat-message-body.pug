@@ -30,8 +30,16 @@ mixin chat-message-body(chats)
               if chat.images && chat.images.length > 0 
                 .images
                   each image in chat.images 
-                    img(src= image, alt="") 
+                    if image
+                      - const isImage = image.match(/\.(jpeg|jpg|gif|png|webp)$/i)
 
+                      if isImage
+                        img(src=image, alt="image" class="chat-image-preview")
+                      else
+                        - const fileName = image.split('/').pop().split('?')[0].split(':upload:')[0]
+                        a(href=image, target="_blank" class="file-attachment-box")
+                          i.bx.bx-file
+                          span.file-name #{fileName}
               .inner-time #{time}
 
     .inner-list-typing

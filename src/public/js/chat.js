@@ -13,31 +13,39 @@ if (uploadImages) {
     },
   });
 }
-// Convert file to base64
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
 
 // client send message
 const formChat = document.querySelector("#chat-form");
 if (formChat) {
   formChat.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const files = upload.cachedFileArray;
+    // text
     const message = e.target[0].value;
-    const images = await Promise.all(files.map((file) => fileToBase64(file)));
+    // file [images , .pdf , .doc]
+    const files = upload.cachedFileArray || [];
+    const filePayloads = await Promise.all(
+      files.map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({
+              buffer: reader.result, // ArrayBuffer
+              fileName: file.name,
+              mimeType: file.type,
+            });
+          };
+          reader.readAsArrayBuffer(file);
+        });
+      })
+    );
+    // get roomId .
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
-    if (message !== "" || images.length !== 0 || roomId) {
+
+    if (message !== "" || filePayloads.length > 0 || roomId) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         message: message,
-        images: images,
+        images: filePayloads,
         roomId: roomId,
       });
       e.target[0].value = "";
@@ -130,10 +138,27 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     htmlContent = `<div class = "content"> ${data.content}</div>`;
   }
 
-  if (data.images.length > 0) {
+  if (data.fileUrls.length > 0) {
     htmlImages += `<div class = "images">`;
-    data.images.forEach((imageUrl) => {
-      htmlImages += `<img src=${imageUrl} alt="">`;
+
+    data.fileUrls.forEach((fileUrl) => {
+      const isImage = fileUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+
+      if (isImage) {
+        htmlImages += `<img src=${fileUrl} alt="" class="chat-image-preview" >`;
+      } else {
+        const fileName = fileUrl
+          .split("/")
+          .pop()
+          .split("?")[0]
+          .split(":upload:")[0];
+        htmlImages += `
+          <a href="${fileUrl}" target="_blank" class="file-attachment-box" >
+            <i class='bx  bx-file'></i> 
+            <span class = "file-name" >${fileName}</span>
+          </a>
+        `;
+      }
     });
     htmlImages += "</div>";
   }
@@ -167,7 +192,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
 // viewer images
 const bodyViewer = document.querySelectorAll(
-  ".chat-main .chat-message-body .inner-message "
+  ".chat-main .chat-message-body .inner-message"
 );
 if (bodyViewer) {
   bodyViewer.forEach((viewer) => {
