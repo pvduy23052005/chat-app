@@ -56,8 +56,8 @@
 3.  **Cấu hình biến môi trường:**
     Tạo file `.env` ở thư mục gốc (copy từ `.env.example` nếu có) và điền các thông tin sau:
     ```env
-    PORT=3000
-    MONGO_URL=mongodb://localhost:27017/chat-app
+    PORT=5050
+    MONGO_URL=mongodb://localhost:5050/chat-app
     ```
 
 4.  **Biên dịch TypeScript:**
