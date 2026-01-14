@@ -19,8 +19,8 @@ const formChat = document.querySelector("#chat-form");
 if (formChat) {
   formChat.addEventListener("submit", async (e) => {
     e.preventDefault();
-    // text
-    const message = e.target[0].value;
+    const inputContent = e.target.querySelector("input");
+    const message = e.target[0].value.trim();
     // file [images , .pdf , .doc]
     const files = upload.cachedFileArray || [];
     const filePayloads = await Promise.all(
@@ -42,14 +42,21 @@ if (formChat) {
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("roomId");
 
-    if (message !== "" || filePayloads.length > 0 || roomId) {
+    if (message === "") {
+      inputContent.focus();
+      return;
+    }
+
+    if ((message !== "" || filePayloads.length > 0) && roomId) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         message: message,
         images: filePayloads,
         roomId: roomId,
+        status: "sent",
       });
       e.target[0].value = "";
       upload.resetPreviewPanel();
+      upload.cachedFileArray = [];
     }
   });
 }
@@ -87,6 +94,10 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     if (boxUser) {
       const prefix = data.user_id === myId ? "Bạn: " : `${data.fullName}: `;
       const boxLastMessage = boxUser.querySelector(".last-message");
+
+      if (currentRoomId !== data.room_id) {
+        boxLastMessage.classList.add("unread");
+      }
       const messageToShow = data.content ? data.content : "Đã gửi một ảnh";
       let fullText = `${prefix}${messageToShow}`;
       if (fullText.length > 25) {
@@ -100,6 +111,16 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     return;
   }
 
+  if (data.user_id === myId) {
+    {
+      const oldStatus = document.querySelector(
+        ".chat-message-body .chat-status"
+      );
+      oldStatus.remove();
+    }
+  }
+
+  // print message .
   const chatBox = document.querySelector(".chat-body .chat-message-body");
   const divMessage = document.createElement("div");
   const listTyping = document.querySelector(
@@ -111,12 +132,20 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   let htmlImages = "";
   let htmlAvatar = "";
   let htmlTime = "";
+  let htmlStatus = "";
 
   const now = new Date();
   const time = now.toLocaleTimeString("vi-VN", {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  if (data.user_id === myId) {
+    htmlStatus = `
+    <span class="chat-status" data-status="sent">
+      Đã Gửi
+    </span>`;
+  }
 
   htmlTime = `<div class="inner-time">${time}</div>`;
 
@@ -163,30 +192,29 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     htmlImages += "</div>";
   }
 
-  if (data.content === "") {
-    divMessage.innerHTML = `
-        ${htmlAvatar}
-      <div class = "inner-message">
-        ${htmlFullName}
-        ${htmlImages} 
-        ${htmlTime}
-      </div>
-    `;
-  } else {
-    divMessage.innerHTML = `
+  divMessage.innerHTML = `
         ${htmlAvatar}
       <div class = "inner-message">
         ${htmlFullName}
         ${htmlContent} 
-        ${htmlImages}
-        ${htmlTime}
+        ${htmlImages} 
+        <div class = "inner-foot">
+          ${htmlTime}
+          ${htmlStatus}
+        </div>
       </div>
     `;
-  }
 
   chatBox.insertBefore(divMessage, listTyping);
   const gallery = new Viewer(divMessage, objectViewer);
   chatBox.scrollTop = chatBox.scrollHeight;
+
+  // user dang o trong phong nay luon . hien la xem luon
+  if (data.user_id != myId) {
+    socket.emit("CLIENT_SENT_SEEN", {
+      roomId: data.room_id,
+    });
+  }
 });
 // end client on send message
 
@@ -287,3 +315,39 @@ if (chatBox) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 // end scrollBody
+
+// status message
+const listRooms = document.querySelectorAll("[room-id]");
+if (listRooms) {
+  listRooms.forEach((room) => {
+    room.addEventListener("click", (e) => {
+      const boxLastMessage = room.querySelector(".last-message");
+      if (boxLastMessage) {
+        boxLastMessage.classList.remove("unread");
+      }
+      const roomId = room.getAttribute("room-id");
+      console.log(roomId);
+      // emit event CLIENT_SEND_SEEN.
+      socket.emit("CLIENT_SENT_SEEN", {
+        roomId: roomId,
+      });
+    });
+  });
+}
+
+socket.on("SERVER_RETURN_SEEN", (data) => {
+  const myId = document.querySelector("[my-id]").getAttribute("my-id");
+
+  if (myId !== data.userId) {
+    const chatStatus = document.querySelector("[data-status]");
+    if (chatStatus) {
+      chatStatus.setAttribute("data-status", "seen");
+      chatStatus.innerHTML = `
+        <span class="chat-status" data-status="seen ">
+          Đã xem
+        </span>
+      `;
+    }
+  }
+});
+// end status message

@@ -10,10 +10,13 @@ const chatSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    default: ""
   },
   images: {
     type: Array,
+  },
+  status: {
+    type: String,
+    enum: ["sent", "seen"],
   },
   deleted: {
     type: Boolean,

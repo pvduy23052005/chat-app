@@ -35,7 +35,8 @@ const chatSocket = async (io: Server, socket: Socket) => {
       user_id: userLogined,
       content: data.message,
       images: fileUrls,
-      room_id: roomId
+      room_id: roomId,
+      status: data.status,
     });
     await newChat.save();
 
@@ -63,6 +64,26 @@ const chatSocket = async (io: Server, socket: Socket) => {
       type: data.type,
       room_id: data.roomId
     })
+  });
+
+  // sent , seen message . 
+  socket.on("CLIENT_SENT_SEEN", async (data) => {
+    try {
+      const roomId = data.roomId;
+      await Chat.updateMany({
+        room_id: roomId,
+        user_id: { $ne: userLogined },
+        status: "sent"
+      },
+        { status: "seen" });
+
+      // server 
+      io.to(roomId).emit("SERVER_RETURN_SEEN", {
+        userId : userLogined,
+        roomId: roomId
+      });
+    } catch (error) {
+    }
   });
 }
 

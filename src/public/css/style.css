@@ -171,6 +171,11 @@
   max-width: 100%;
 }
 
+.chat-main .box-friend .inner-content .last-message.unread {
+  font-size: 700;
+  color: #000000ce;
+}
+
 .chat-main .chat-box {
   display: flex;
   flex-direction: column;
@@ -302,6 +307,24 @@
   visibility: visible;
 }
 
+.inner-outgoing .inner-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 4px; /* Cách đoạn chat một chút cho thoáng */
+  flex-direction: column;
+}
+
+.inner-outgoing .chat-status {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+}
+
 .chat-box .inner-outgoing .content {
   display: inline-block;
   border-radius: 12px;
@@ -350,10 +373,15 @@
 .chat-box .chat-message-footer input {
   flex: 1;
   padding: 8px 10px;
-  border: 1px solid #ccc;
   border-radius: 20px;
   outline: none;
   min-width: 0;
+  border: 1px solid var(--color-hover-secondary);
+  color: var(--color-button);
+}
+
+.chat-box .chat-message-footer input:focus {
+  border: 1px solid var(--color-button);
 }
 
 .file-attachment-box {
@@ -376,16 +404,16 @@
 
 .file-attachment-box i {
   font-size: 20px;
-  color: #e74c3c; 
+  color: #e74c3c;
 }
 
 .file-attachment-box .file-name {
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 150px; 
+  max-width: 150px;
 }
 
 /* end css chat  */

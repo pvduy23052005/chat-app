@@ -1,6 +1,10 @@
 mixin chat-message-body(chats)
   .chat-message-body 
-    each chat in chats 
+
+    //- select last message . 
+    - const myId = user.id.toString()
+    - latMessageIndex = chats.map(item => item.user_id.id.toString()).lastIndexOf(myId) 
+    each chat , index in chats 
       - const isSystem = chat.content.includes("đã rời nhóm") || chat.content.includes("đã thêm") || chat.content.includes("đã xóa")
 
       if isSystem
@@ -40,6 +44,15 @@ mixin chat-message-body(chats)
                         a(href=image, target="_blank" class="file-attachment-box")
                           i.bx.bx-file
                           span.file-name #{fileName}
-              .inner-time #{time}
+              if user_id == myId && index === latMessageIndex
+                .inner-foot
+                  span.inner-time #{time}
+                  if chat.status === "seen"
+                    span( class = "chat-status" data-status=chat.status) Đã xem
+                  else
+                    span(class = "chat-status" data-status=chat.status) Đã gửi
+              else 
+                .inner-foot
+                  span.inner-time #{time}
 
     .inner-list-typing

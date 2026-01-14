@@ -9,8 +9,10 @@ export interface UserChatSidebar {
   room_chat_id: string;
   statusOnline: "online" | "offline";
   lastMessage: string;
+  status: "sent" | "seen";
   updatedAt: Date;
   typeRoom: string;
+  lastMessageUserId: string;
 }
 
 const getRoomUser = async (res: Response, status: string = "accepted"): Promise<UserChatSidebar[]> => {
@@ -28,14 +30,14 @@ const getRoomUser = async (res: Response, status: string = "accepted"): Promise<
       deleted: false,
     })
       .sort({ updatedAt: -1 })
-      .lean() 
+      .lean()
       .populate({
         path: "members.user_id",
         select: "fullName avatar statusOnline"
       })
-      .populate({ 
+      .populate({
         path: "lastMessageId",
-        select: "content"
+        select: "content status user_id"
       });
 
     const users = rooms.map((room: any): UserChatSidebar | null => {
@@ -54,6 +56,8 @@ const getRoomUser = async (res: Response, status: string = "accepted"): Promise<
           room_chat_id: room._id.toString(),
           statusOnline: user.statusOnline || "offline",
           lastMessage: room.lastMessageId ? room.lastMessageId.content : "Bắt đầu cuộc trò chuyện",
+          status: room.lastMessageId.status,
+          lastMessageUserId: room.lastMessageId.user_id.toString(),
           updatedAt: room.updatedAt,
           typeRoom: "single"
         };

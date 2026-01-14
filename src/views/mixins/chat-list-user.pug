@@ -1,7 +1,9 @@
 mixin chat-list-user(users)
   .chat-list-friend 
+    - const myId = user.id
     each user in users
       - const isActive = (roomId === user.room_chat_id) ? "active" : ""
+      - const isRead = (user.lastMessageUserId !== myId) && (user.status == "sent") ? "unread" : ""
 
       a(href=`/chat?roomId=${user.room_chat_id}` 
         class = `box-friend ${isActive}`
@@ -11,7 +13,7 @@ mixin chat-list-user(users)
         img(src=(user.avatar ? user.avatar : "/images/default-avatar.webp") alt="")
         .inner-content 
           span(class = "name") #{(user.fullName ?user.fullName : user.title )} 
-          span(class = "last-message") 
+          span(class=`last-message ${isRead}`) 
             | #{user.lastMessage ? (user.lastMessage.length > 25 ? user.lastMessage.slice(0, 15) + "..." : user.lastMessage) : "Bắt đầu trò chuyện"}
         .inner-status(status=user.statusOnline)
           i.fa-solid.fa-circle

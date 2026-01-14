@@ -11,7 +11,6 @@ const authMiddleware = async (
     const token: string | undefined = req.cookies?.token;
 
     if (!token) {
-      req.flash("error", "Vui lòng thử lại");
       return res.redirect("/auth/login");
     }
 
@@ -22,7 +21,7 @@ const authMiddleware = async (
       deleted: false,
     }).select("-password");
     if (!user) {
-      req.flash("error", "Vui lòng thử lại");
+      req.flash("error", "Hết phiên đăng nhập , vui lòng đăng nhập lại");
       return res.redirect("/auth/login");
     }
     res.locals.user = user;

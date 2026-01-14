@@ -6,6 +6,8 @@ interface GroupChat {
   avatar: string;
   typeRoom: string;
   room_chat_id: string;
+  status: ["sent", "seen"];
+  _id: string;
   lastMessage: string;
   updatedAt: Date;
 }
@@ -23,7 +25,7 @@ const getRoomGroup = async (res: Response): Promise<GroupChat[]> => {
       .lean()
       .populate({
         path: "lastMessageId",
-        select: "content"
+        select: "content status user_id"
       });
 
     const allRooms = rooms.map((item: any): GroupChat => {
@@ -33,6 +35,8 @@ const getRoomGroup = async (res: Response): Promise<GroupChat[]> => {
         typeRoom: item.typeRoom,
         room_chat_id: item._id.toString(),
         lastMessage: item.lastMessageId ? item.lastMessageId.content : "Bắt đầu cuộc trò chuyện",
+        status: item.status,
+        _id: item.lastMessageId.user_id,
         updatedAt: item.updatedAt,
       };
     });
